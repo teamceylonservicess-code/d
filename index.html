@@ -6,6 +6,25 @@
     <title>Learny - Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Premium Lock Styles for Quick Stats */
+        .stat-locked-value {
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(245, 158, 11, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .stat-locked-value img {
+            width: 14px;
+            height: 14px;
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -129,6 +148,7 @@
                     </div>
                 </div>
 
+                <!-- PREMIUM LOCKED QUICK STATS -->
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fa fa-bolt"></i> Quick Stats</h2>
@@ -137,34 +157,22 @@
                     <div class="quick-stats-list">
                         <div class="stat-row">
                             <span>Total Days</span>
-                            <strong style="color: var(--warning); display: flex; align-items: center; gap: 6px;">
-                                - 
-                                <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 14px; height: 14px;">
-                            </strong>
+                            <div class="stat-locked-value">- <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium"></div>
                         </div>
                         <div class="stat-row">
                             <span>Avg Hours/Day</span>
-                            <strong style="color: var(--warning); display: flex; align-items: center; gap: 6px;">
-                                - 
-                                <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 14px; height: 14px;">
-                            </strong>
+                            <div class="stat-locked-value">- <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium"></div>
                         </div>
                         <div class="stat-row">
                             <span>Tasks Done</span>
-                            <strong style="color: var(--warning); display: flex; align-items: center; gap: 6px;">
-                                - 
-                                <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 14px; height: 14px;">
-                            </strong>
+                            <div class="stat-locked-value">- <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium"></div>
                         </div>
                         <div class="stat-row">
                             <span>Achievements</span>
-                            <strong style="color: var(--warning); display: flex; align-items: center; gap: 6px;">
-                                - 
-                                <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 14px; height: 14px;">
-                            </strong>
+                            <div class="stat-locked-value">- <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium"></div>
                         </div>
                     </div>
-                    <div style="text-align: center; margin-top: 12px; padding: 12px; background: var(--bg-dark); border-radius: 8px;">
+                    <div style="text-align: center; margin-top: 16px; padding: 12px; background: var(--bg-dark); border-radius: 8px;">
                         <a href="premium.html" class="btn btn-sm" style="background: linear-gradient(135deg, var(--warning), #fbbf24); color: #000;">
                             <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
                             Unlock Stats
@@ -197,5 +205,26 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // ✅ LOCK STATS UI AFTER APP LOADS (Prevents script crash & enforces premium lock)
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const stats = ['total-days', 'avg-hours', 'total-done', 'achievement-count'];
+                stats.forEach(function(id) {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.innerHTML = '- <img src="https://i.postimg.cc/nrFwN8kn/gem.png" style="width:14px;height:14px;vertical-align:middle;">';
+                        el.style.color = 'var(--warning)';
+                        el.style.display = 'flex';
+                        el.style.alignItems = 'center';
+                        el.style.gap = '6px';
+                        el.style.background = 'rgba(245, 158, 11, 0.1)';
+                        el.style.padding = '4px 8px';
+                        el.style.borderRadius = '6px';
+                    }
+                });
+            }, 500);
+        });
+    </script>
 </body>
 </html>
