@@ -6,10 +6,11 @@
     <title>Learny - Music</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="overlay"></div>
     <div class="app-container">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">L</div>
@@ -33,107 +34,88 @@
                 <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
             </ul>
             <div class="sidebar-welcome">
-                <p id="sidebar-username">Welcome!</p>
+                <div class="sidebar-welcome-text">Welcome, <span id="sidebar-username">User</span>!</div>
                 <div class="divider"></div>
-                <p>Stay focused & keep learning</p>
+                <p>Stay focused & keep learning ✨</p>
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
             <div class="page-header">
                 <h1 class="page-title"><i class="fa fa-music"></i> Study Music</h1>
                 <div class="header-actions">
-                    <button class="theme-toggle"><i class="fa fa-moon"></i></button>
+                    <button class="theme-toggle" title="Toggle Theme"><i class="fa fa-moon"></i></button>
                 </div>
             </div>
 
             <div class="grid-2">
-                <!-- Music Player -->
-                <div class="card">
-                    <div class="music-player">
-                        <div class="album-art">
-                            <i class="fa fa-music"></i>
-                        </div>
-                        <h3 id="music-title" style="margin-bottom:8px;">Relax 1</h3>
-                        <div class="time-display">
-                            <span id="music-current">0:00</span>
-                            <span id="music-total">0:00</span>
-                        </div>
-                        <div class="progress-seek" id="music-progress-bar">
-                            <div class="progress-fill" id="music-progress"></div>
-                        </div>
-                        <div class="player-controls">
-                            <button class="player-btn" id="prev-btn"><i class="fa fa-step-backward"></i></button>
-                            <button class="player-btn play-btn" id="play-pause-btn"><i class="fa fa-play"></i></button>
-                            <button class="player-btn" id="next-btn"><i class="fa fa-step-forward"></i></button>
-                        </div>
+                <div class="music-player">
+                    <div class="album-art">
+                        <i class="fa fa-music"></i>
+                    </div>
+                    <h3 id="music-title" style="margin-bottom:8px;">Relax 1</h3>
+                    <div class="time-display">
+                        <span id="music-current">0:00</span>
+                        <span id="music-total">0:00</span>
+                    </div>
+                    <div class="progress-seek" id="music-progress-bar">
+                        <div class="progress-fill" id="music-progress"></div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="player-btn" onclick="APP.prevTrack()"><i class="fa fa-step-backward"></i></button>
+                        <button class="player-btn play-btn" id="play-pause-btn" onclick="APP.togglePlay()"><i class="fa fa-play"></i></button>
+                        <button class="player-btn" onclick="APP.nextTrack()"><i class="fa fa-step-forward"></i></button>
                     </div>
                 </div>
 
-                <!-- Upload Section (Locked) -->
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title"><i class="fa fa-upload"></i> Upload Song</h2>
-                        <span class="premium-lock" title="Premium Feature">
-                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width:24px;height:24px;">
-                        </span>
-                    </div>
-                    <div class="locked-feature" onclick="openPremiumModal()" style="text-align:center;padding:40px 20px;cursor:pointer;">
-                        <div style="font-size:64px;color:var(--text-muted);margin-bottom:16px;">
-                            <i class="fa fa-lock"></i>
+                        <h2 class="card-title"><i class="fa fa-list"></i> Playlist</h2>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <span class="premium-badge" onclick="APP.showPremiumPopup()" title="Unlock Upload Feature">
+                                <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width:20px;height:20px;">
+                            </span>
+                            <label class="btn btn-secondary btn-sm" style="cursor:not-allowed;opacity:0.6;" title="Premium Feature - Click to Upgrade">
+                                <i class="fa fa-lock"></i> Upload Song
+                            </label>
                         </div>
-                        <h3 style="color:var(--text-main);margin-bottom:8px;">Premium Feature</h3>
-                        <p style="color:var(--text-muted);margin-bottom:16px;">Upload your favorite study music</p>
-                        <button class="btn btn-primary">
-                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width:18px;height:18px;margin-right:8px;">
-                            Upgrade to Premium
-                        </button>
+                    </div>
+                    <div id="music-playlist" class="task-list">
+                        <!-- Playlist items will be rendered here -->
                     </div>
                 </div>
             </div>
 
-            <!-- Playlist -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fa fa-list"></i> Playlist</h2>
-                </div>
-                <div id="music-playlist" class="playlist-container">
-                    <!-- Playlist items will be loaded here -->
-                </div>
-            </div>
-
-            <!-- Footer -->
             <footer class="site-footer">
-                <p>Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱🇰</p>
+                <p>Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱</p>
             </footer>
         </main>
     </div>
 
-    <!-- Premium Popup Modal -->
-    <div id="premium-modal" class="premium-modal-overlay">
-        <div class="premium-modal">
-            <button class="modal-close" onclick="closePremiumModal()"><i class="fa fa-times"></i></button>
-            <div class="premium-modal-content">
-                <div class="premium-modal-icon">
-                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" class="gem-icon">
-                </div>
-                <h2>Premium Feature</h2>
-                <p>Upload unlimited songs and create your perfect study playlist!</p>
-                <div class="premium-benefits">
-                    <div class="benefit-item"><i class="fa fa-check"></i> Upload unlimited songs</div>
-                    <div class="benefit-item"><i class="fa fa-check"></i> Create custom playlists</div>
-                    <div class="benefit-item"><i class="fa fa-check"></i> Offline playback</div>
-                    <div class="benefit-item"><i class="fa fa-check"></i> High-quality audio</div>
-                </div>
-                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top:20px;width:100%;justify-content:center;">
-                    <i class="fa fa-crown"></i> Upgrade to Premium
-                </a>
+    <!-- Premium Popup -->
+    <div id="premium-popup" class="premium-popup-overlay" style="display:none;" onclick="APP.hidePremiumPopup(event)">
+        <div class="premium-popup-content" onclick="event.stopPropagation()">
+            <div class="premium-popup-header">
+                <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" class="premium-popup-icon">
+                <h2>Unlock Premium Features</h2>
+            </div>
+            <div class="premium-popup-body">
+                <img src="https://i.postimg.cc/7Lc2pSnK/upload.gif" alt="Upload Songs" class="premium-popup-image">
+                <p class="premium-popup-text">Upload your favorite study music and create your personalized playlist!</p>
+                <ul class="premium-popup-features">
+                    <li><i class="fa fa-check"></i> Unlimited Song Uploads</li>
+                    <li><i class="fa fa-check"></i> Create Custom Playlists</li>
+                    <li><i class="fa fa-check"></i> High Quality Audio</li>
+                    <li><i class="fa fa-check"></i> Offline Playback</li>
+                </ul>
+            </div>
+            <div class="premium-popup-footer">
+                <a href="premium.html" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;"><i class="fa fa-crown"></i> Upgrade to Premium</a>
+                <button class="btn btn-secondary" onclick="APP.hidePremiumPopup()" style="width:100%;margin-top:8px;">Maybe Later</button>
             </div>
         </div>
     </div>
 
-    <!-- Notification Toast -->
     <div id="notification-toast" class="notification">
         <i class="fa fa-check-circle"></i>
         <span>Notification</span>
@@ -141,19 +123,27 @@
 
     <script src="script.js"></script>
     <script>
-        function openPremiumModal() {
-            document.getElementById('premium-modal').classList.add('show');
+    APP.isPremium = false;
+    
+    APP.showPremiumPopup = function() {
+        if (this.isPremium) return;
+        document.getElementById('premium-popup').style.display = 'flex';
+    };
+    
+    APP.hidePremiumPopup = function(event) {
+        if (!event || event.target.id === 'premium-popup') {
+            document.getElementById('premium-popup').style.display = 'none';
         }
-
-        function closePremiumModal() {
-            document.getElementById('premium-modal').classList.remove('show');
-        }
-
-        document.getElementById('premium-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closePremiumModal();
-            }
-        });
+    };
+    
+    // Disable upload button for non-premium
+    const uploadBtn = document.querySelector('label[title="Premium Feature - Click to Upgrade"]');
+    if (uploadBtn && !APP.isPremium) {
+        uploadBtn.onclick = function(e) {
+            e.preventDefault();
+            APP.showPremiumPopup();
+        };
+    }
     </script>
 </body>
 </html>
