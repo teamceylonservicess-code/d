@@ -7,34 +7,41 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Premium Lock Styles (Inline to avoid style.css changes) */
-        .premium-lock-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.5);
-            border-radius: var(--radius);
-            cursor: pointer;
-            z-index: 5;
-            backdrop-filter: blur(2px);
-            transition: all var(--transition);
+        /* Premium Popup Styles (Keeps existing styles intact) */
+        .premium-popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); display: none;
+            align-items: center; justify-content: center; z-index: 10000;
+            backdrop-filter: blur(5px);
         }
-        .premium-lock-overlay:hover {
-            background: rgba(0,0,0,0.7);
+        .premium-popup {
+            background: var(--bg-card); border: 2px solid var(--warning);
+            border-radius: var(--radius); padding: 32px; max-width: 420px; width: 90%;
+            text-align: center; position: relative;
+            animation: popupSlide 0.3s ease; box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
         }
-        .premium-lock-content {
-            color: var(--warning);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
+        @keyframes popupSlide {
+            from { opacity: 0; transform: translateY(-30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .premium-lock-content img {
-            width: 16px; height: 16px;
+        .premium-popup-close {
+            position: absolute; top: 14px; right: 14px; width: 36px; height: 36px;
+            border-radius: 50%; background: var(--bg-dark); border: 1px solid var(--border);
+            color: var(--text-muted); cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s;
         }
+        .premium-popup-close:hover { background: var(--danger); color: #fff; transform: rotate(90deg); }
+        .premium-popup-icon { width: 80px; height: 80px; margin: 0 auto 16px; }
+        .premium-popup-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .premium-popup h2 {
+            font-size: 24px; background: linear-gradient(135deg, var(--warning), #fbbf24);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
+        }
+        .premium-popup p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+        
+        /* Premium Locked Stat UI */
+        .stat-locked-text { color: var(--warning) !important; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .stat-locked-text img { width: 16px; height: 16px; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -108,20 +115,14 @@
                         <p>Done</p>
                     </div>
                 </div>
-                <div class="stat-card" style="position: relative; overflow: hidden;">
+                <!-- PREMIUM LOCKED COMPLETION RATE -->
+                <div class="stat-card">
                     <div class="stat-icon blue"><i class="fa fa-chart-line"></i></div>
-                    <div class="stat-info" style="position: relative;">
-                        <!-- Locked ID for APP compatibility -->
-                        <h3 id="completion-rate" style="color: var(--warning); display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            🔒 <img src="https://i.postimg.cc/nrFwN8kn/gem.png" style="width:16px;height:16px;">
+                    <div class="stat-info">
+                        <h3 id="completion-rate" class="stat-locked-text">
+                            0% <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
                         </h3>
                         <p>Completion</p>
-                    </div>
-                    <div class="premium-lock-overlay" onclick="window.location.href='premium.html'">
-                        <div class="premium-lock-content">
-                            <span>Unlock %</span>
-                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -130,7 +131,7 @@
                 <div class="card-header">
                     <h2 class="card-title"><i class="fa fa-plus-circle"></i> Add Task</h2>
                     <span class="badge" style="background: var(--bg-dark); padding: 4px 10px; border-radius: 12px; font-size: 12px; color: var(--text-muted);">
-                        <i class="fa fa-lock" style="margin-right: 4px;"></i> 4/4 Free
+                        <i class="fa fa-lock" style="margin-right: 4px;"></i> <span id="task-limit-display">0</span>/4 Free
                     </span>
                 </div>
                 <form id="task-form" class="form-row">
@@ -161,76 +162,90 @@
         </main>
     </div>
 
+    <!-- Premium Popup -->
+    <div id="premium-popup" class="premium-popup-overlay">
+        <div class="premium-popup">
+            <button class="premium-popup-close" onclick="closePremiumPopup()" aria-label="Close"><i class="fa fa-times"></i></button>
+            <div class="premium-popup-content">
+                <div class="premium-popup-icon">
+                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
+                </div>
+                <h2>Task Limit Reached</h2>
+                <p>You've reached the free limit of 4 tasks per day. Upgrade to Premium for unlimited tasks, detailed completion analytics, and progress tracking!</p>
+                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 12px;">
+                    <i class="fa fa-crown"></i> Unlock Premium
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script>
-        // 1. ENFORCE 4-TASK LIMIT & SHOW PREMIUM POPUP
+        // ==========================================
+        // PREMIUM ENFORCEMENT SCRIPT
+        // ==========================================
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('task-form');
-            if (form) {
-                // Capturing phase runs BEFORE APP's submit listener
-                form.addEventListener('submit', function(e) {
-                    const today = new Date().toDateString();
-                    const currentTasks = APP.data.tasks.filter(t => t.date === today);
-                    
-                    if (currentTasks.length >= 4) {
-                        e.preventDefault();
-                        e.stopImmediatePropagation();
-                        if(APP && APP.showToast) APP.showToast('🔒 Upgrade to Premium for unlimited tasks!');
-                        else alert('🔒 Upgrade to Premium for unlimited tasks!');
-                        showTaskLimitPremiumPopup();
-                    }
-                }, true);
-            }
+            
+            // 1. Override APP.renderTasks to lock Completion % UI
+            const originalRenderTasks = APP.renderTasks;
+            APP.renderTasks = function() {
+                // Call original logic to update other stats and list
+                originalRenderTasks.call(APP);
+                
+                // Force lock the completion rate
+                const el = document.getElementById('completion-rate');
+                if (el) {
+                    el.innerHTML = '0% <img src="https://i.postimg.cc/nrFwN8kn/gem.png" style="width:16px;height:16px;vertical-align:middle;">';
+                    el.classList.add('stat-locked-text');
+                }
+
+                // Update the free limit badge
+                const today = new Date().toDateString();
+                const count = APP.data.tasks.filter(t => t.date === today).length;
+                const badge = document.getElementById('task-limit-display');
+                if (badge) badge.textContent = count;
+            };
+
+            // 2. Override APP.initTasks to intercept form submission
+            // We wrap the original initTasks to add our premium check listener
+            const originalInitTasks = APP.initTasks;
+            APP.initTasks = function() {
+                // Run the original initialization (binds the standard submit handler)
+                originalInitTasks.call(APP);
+                
+                // Add our premium check listener in the CAPTURE phase (runs before original)
+                const form = document.getElementById('task-form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        const today = new Date().toDateString();
+                        const currentTasks = APP.data.tasks.filter(t => t.date === today);
+                        
+                        // Check if limit reached
+                        if (currentTasks.length >= 4) {
+                            e.preventDefault();       // Stop default form action
+                            e.stopPropagation();      // Stop bubble to other listeners
+                            e.stopImmediatePropagation(); // Stop bubble to other immediate listeners
+                            showPremiumPopup();       // Show premium popup
+                            return false;
+                        }
+                    }, true); // true = use capture phase
+                }
+            };
         });
 
-        // 2. LOCK COMPLETION % UI & OVERRIDE APP UPDATES
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof APP !== 'undefined') {
-                const originalRender = APP.renderTasks;
-                APP.renderTasks = function() {
-                    originalRender.call(APP);
-                    // Re-lock completion percentage immediately after APP renders
-                    const el = document.getElementById('completion-rate');
-                    if (el) {
-                        el.innerHTML = '🔒 <img src="https://i.postimg.cc/nrFwN8kn/gem.png" style="width:16px;height:16px;vertical-align:middle;">';
-                        el.style.color = 'var(--warning)';
-                        el.style.display = 'flex';
-                        el.style.alignItems = 'center';
-                        el.style.justifyContent = 'center';
-                        el.style.gap = '6px';
-                    }
-                };
-                // Run once after initial APP load
-                setTimeout(() => APP.renderTasks && APP.renderTasks(), 150);
-            }
-        });
-
-        // Premium Popup Function
-        function showTaskLimitPremiumPopup() {
-            if (document.querySelector('.task-limit-popup')) return;
-            const popup = document.createElement('div');
-            popup.className = 'premium-popup-overlay task-limit-popup';
-            popup.style.display = 'flex';
-            popup.innerHTML = `
-                <div class="premium-popup">
-                    <button class="premium-popup-close" onclick="this.closest('.task-limit-popup').remove()" aria-label="Close"><i class="fa fa-times"></i></button>
-                    <div class="premium-popup-content">
-                        <div class="premium-popup-icon">
-                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
-                        </div>
-                        <h2>Task Limit Reached</h2>
-                        <p>You've reached the free limit of 4 tasks. Upgrade to Premium for unlimited tasks and full progress tracking!</p>
-                        <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 16px;">
-                            <i class="fa fa-crown"></i> Get Premium
-                        </a>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(popup);
-            popup.addEventListener('click', function(e) {
-                if (e.target === popup) popup.remove();
-            });
+        // Popup Functions
+        function showPremiumPopup() {
+            document.getElementById('premium-popup').style.display = 'flex';
         }
+
+        function closePremiumPopup() {
+            document.getElementById('premium-popup').style.display = 'none';
+        }
+
+        // Close on outside click
+        document.getElementById('premium-popup').addEventListener('click', function(e) {
+            if (e.target === this) closePremiumPopup();
+        });
     </script>
 </body>
 </html>
