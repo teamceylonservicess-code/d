@@ -6,79 +6,82 @@
     <title>Learny - Music</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="overlay"></div>
     <div class="app-container">
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">L</div>
                 <div class="sidebar-title">Learny</div>
             </div>
-            <ul class="nav-list">
-                <li class="nav-item"><a href="index.html"><i class="fa fa-home"></i> Dashboard</a></li>
-                <li class="nav-item"><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
-                <li class="nav-item"><a href="assistant.html"><i class="fa fa-robot"></i> Assistant</a></li>
-                <li class="nav-item"><a href="tasks.html"><i class="fa fa-tasks"></i> Tasks</a></li>
-                <li class="nav-item"><a href="time.html"><i class="fa fa-clock"></i> Time Tracker</a></li>
-                <li class="nav-item"><a href="achievements.html"><i class="fa fa-trophy"></i> Achievements</a></li>
-                <li class="nav-item"><a href="motivation.html"><i class="fa fa-lightbulb"></i> Motivation</a></li>
-                <li class="nav-item active"><a href="music.html"><i class="fa fa-music"></i> Music</a></li>
-                <li class="nav-item"><a href="pomodoro.html"><i class="fa fa-stopwatch"></i> Pomodoro</a></li>
-                <li class="nav-item"><a href="mark.html"><i class="fa fa-chart-line"></i> Mark Analyze</a></li>
-                <li class="nav-item"><a href="pastpapers.html"><i class="fa fa-file-alt"></i> Past Papers</a></li>
-                <li class="nav-item"><a href="countdown.html"><i class="fa fa-hourglass-half"></i> Countdown</a></li>
-                <li class="nav-item"><a href="settings.html"><i class="fa fa-cog"></i> Settings</a></li>
-                <li class="nav-item"><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
-                <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
-            </ul>
+            <nav>
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+                    <li class="nav-item"><a href="assistant.html"><i class="fa fa-robot"></i> Assistant</a></li>
+                    <li class="nav-item"><a href="tasks.html"><i class="fa fa-tasks"></i> Tasks</a></li>
+                    <li class="nav-item"><a href="time.html"><i class="fa fa-clock"></i> Time Tracker</a></li>
+                    <li class="nav-item"><a href="achievements.html"><i class="fa fa-trophy"></i> Achievements</a></li>
+                    <li class="nav-item"><a href="motivation.html"><i class="fa fa-quote-left"></i> Motivation</a></li>
+                    <li class="nav-item active"><a href="music.html"><i class="fa fa-music"></i> Music</a></li>
+                    <li class="nav-item"><a href="pomodoro.html"><i class="fa fa-stopwatch"></i> Pomodoro</a></li>
+                    <li class="nav-item"><a href="mark.html"><i class="fa fa-chart-line"></i> Mark Analyze</a></li>
+                    <li class="nav-item"><a href="pastpapers.html"><i class="fa fa-file-alt"></i> Past Papers</a></li>
+                    <li class="nav-item"><a href="countdown.html"><i class="fa fa-hourglass-half"></i> Countdown</a></li>
+                    <li class="nav-item"><a href="settings.html"><i class="fa fa-cog"></i> Settings</a></li>
+                    <li class="nav-item"><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
+                    <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
+                </ul>
+            </nav>
             <div class="sidebar-welcome">
-                <div class="sidebar-welcome-text">Welcome, <span id="sidebar-username">User</span>!</div>
+                <p>Powered by <a href="contact.html">DC</a></p>
                 <div class="divider"></div>
-                <p>Stay focused & keep learning ✨</p>
+                <p>Made in Sri Lanka 🇱🇰</p>
             </div>
         </aside>
 
+        <!-- Main Content -->
         <main class="main-content">
             <div class="page-header">
                 <h1 class="page-title"><i class="fa fa-music"></i> Study Music</h1>
                 <div class="header-actions">
-                    <button class="theme-toggle" title="Toggle Theme"><i class="fa fa-moon"></i></button>
+                    <button class="theme-toggle" id="theme-toggle"><i class="fa fa-moon"></i></button>
+                    <button class="notif-btn"><i class="fa fa-bell"></i></button>
                 </div>
             </div>
 
-            <div class="grid-2">
-                <div class="music-player">
-                    <div class="album-art">
-                        <i class="fa fa-music"></i>
-                    </div>
-                    <h3 id="music-title" style="margin-bottom:8px;">Relax 1</h3>
-                    <div class="time-display">
-                        <span id="music-current">0:00</span>
-                        <span id="music-total">0:00</span>
-                    </div>
-                    <div class="progress-seek" id="music-progress-bar">
-                        <div class="progress-fill" id="music-progress"></div>
-                    </div>
-                    <div class="player-controls">
-                        <button class="player-btn" onclick="APP.prevTrack()"><i class="fa fa-step-backward"></i></button>
-                        <button class="player-btn play-btn" id="play-pause-btn" onclick="APP.togglePlay()"><i class="fa fa-play"></i></button>
-                        <button class="player-btn" onclick="APP.nextTrack()"><i class="fa fa-step-forward"></i></button>
-                    </div>
+            <div class="music-player card">
+                <div class="album-art">
+                    <i class="fa fa-music"></i>
+                </div>
+                <h2 id="music-title" style="margin-bottom: 8px;">Relax 1</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Study Playlist</p>
+                
+                <div class="time-display">
+                    <span id="music-current">0:00</span>
+                    <span id="music-total">0:00</span>
+                </div>
+                
+                <div class="progress-seek" id="music-progress-bar">
+                    <div class="progress-fill" id="music-progress"></div>
+                </div>
+                
+                <div class="player-controls">
+                    <button class="player-btn" id="prev-btn"><i class="fa fa-step-backward"></i></button>
+                    <button class="player-btn play-btn" id="play-pause-btn"><i class="fa fa-play"></i></button>
+                    <button class="player-btn" id="next-btn"><i class="fa fa-step-forward"></i></button>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fa fa-list"></i> Playlist</h2>
-                        <div style="display:flex;gap:8px;align-items:center;">
-                            <span class="premium-badge" onclick="APP.showPremiumPopup()" title="Unlock Upload Feature">
-                                <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width:20px;height:20px;">
-                            </span>
-                            <label class="btn btn-secondary btn-sm" style="cursor:not-allowed;opacity:0.6;" title="Premium Feature - Click to Upgrade">
-                                <i class="fa fa-lock"></i> Upload Song
-                            </label>
-                        </div>
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3 style="margin: 0;"><i class="fa fa-list"></i> Playlist</h3>
+                        <button class="btn btn-primary premium-popup-trigger" style="gap: 8px; font-size: 12px;">
+                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 16px; height: 16px;">
+                            Upload Song
+                        </button>
                     </div>
                     <div id="music-playlist" class="task-list">
                         <!-- Playlist items will be rendered here -->
@@ -87,43 +90,48 @@
             </div>
 
             <footer class="site-footer">
-                <p>Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱</p>
+                <p>Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱🇰</p>
             </footer>
         </main>
     </div>
 
-  
+    <!-- Premium Popup -->
+    <div class="premium-popup-overlay" id="premiumPopup">
+        <div class="premium-popup">
+            <button class="premium-popup-close" onclick="closePremiumPopup()"><i class="fa fa-times"></i></button>
+            <div class="premium-popup-content">
+                <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" class="premium-popup-icon">
+                <h2>Unlock Premium Features</h2>
+                <p>Upload your own songs and enjoy unlimited music storage!</p>
+                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 20px;">
+                    <i class="fa fa-crown"></i> View Premium Plans
+                </a>
+            </div>
         </div>
-    </div>
-
-    <div id="notification-toast" class="notification">
-        <i class="fa fa-check-circle"></i>
-        <span>Notification</span>
     </div>
 
     <script src="script.js"></script>
     <script>
-    APP.isPremium = false;
-    
-    APP.showPremiumPopup = function() {
-        if (this.isPremium) return;
-        document.getElementById('premium-popup').style.display = 'flex';
-    };
-    
-    APP.hidePremiumPopup = function(event) {
-        if (!event || event.target.id === 'premium-popup') {
-            document.getElementById('premium-popup').style.display = 'none';
+        // Premium Popup Functions
+        function openPremiumPopup() {
+            document.getElementById('premiumPopup').classList.add('show');
         }
-    };
-    
-    // Disable upload button for non-premium
-    const uploadBtn = document.querySelector('label[title="Premium Feature - Click to Upgrade"]');
-    if (uploadBtn && !APP.isPremium) {
-        uploadBtn.onclick = function(e) {
-            e.preventDefault();
-            APP.showPremiumPopup();
-        };
-    }
+
+        function closePremiumPopup() {
+            document.getElementById('premiumPopup').classList.remove('show');
+        }
+
+        document.querySelectorAll('.premium-popup-trigger').forEach(btn => {
+            btn.addEventListener('click', openPremiumPopup);
+        });
+
+        // Close popup when clicking outside
+        document.getElementById('premiumPopup').addEventListener('click', function(e) {
+            if (e.target === this) closePremiumPopup();
+        });
+
+        // Prevent upload functionality for free users
+        document.getElementById('music-upload')?.remove();
     </script>
 </body>
 </html>
