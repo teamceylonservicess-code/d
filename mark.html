@@ -7,94 +7,36 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Premium Lock Styles (Self-contained) */
-        .premium-card-wrapper {
+        /* Premium Lock Styles (Inline - No changes to style.css) */
+        .premium-locked {
+            opacity: 0.75;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+            background: var(--bg-dark) !important;
+            border: 1px dashed rgba(245, 158, 11, 0.4) !important;
+        }
+        .premium-locked:focus {
+            border-color: rgba(245, 158, 11, 0.4) !important;
+            box-shadow: none !important;
+        }
+        .premium-inline-icon {
+            width: 14px; height: 14px; vertical-align: middle; margin-left: 5px; opacity: 0.9;
+        }
+        .premium-header-badge {
+            width: 18px; height: 18px; vertical-align: middle;
+        }
+        .input-wrapper-locked { position: relative; }
+        .lock-symbol {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            color: var(--warning); font-size: 14px; pointer-events: none;
+        }
+        .btn-locked {
+            opacity: 0.6; cursor: not-allowed !important;
             position: relative;
-            overflow: hidden;
-            pointer-events: none; /* Blocks interaction with underlying elements */
         }
-        .premium-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 15, 26, 0.85);
-            backdrop-filter: blur(6px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            cursor: pointer;
-            pointer-events: auto; /* Overlay captures clicks */
-            transition: background var(--transition);
+        .btn-locked::after {
+            content: '🔒'; margin-left: 6px; font-size: 12px; vertical-align: middle;
         }
-        .premium-overlay:hover {
-            background: rgba(15, 15, 26, 0.92);
-        }
-        .premium-overlay-content {
-            text-align: center;
-            color: var(--text-main);
-            animation: float 3s ease-in-out infinite;
-        }
-        .premium-overlay-content i {
-            font-size: 48px;
-            color: var(--warning);
-            margin-bottom: 16px;
-            display: block;
-        }
-        .premium-overlay-content h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            color: var(--warning);
-        }
-        .premium-overlay-content p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-        .premium-overlay-content .btn {
-            background: linear-gradient(135deg, var(--warning), #fbbf24);
-            color: #000;
-            font-weight: 700;
-            padding: 10px 24px;
-            border-radius: 24px;
-        }
-        
-        /* Disable inputs visually even if overlay wasn't enough */
-        .mark-input-disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        /* Premium Popup Styles */
-        .mark-popup-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-            display: none; align-items: center; justify-content: center;
-            z-index: 10000; backdrop-filter: blur(5px);
-        }
-        .mark-popup {
-            background: var(--bg-card); border: 2px solid var(--warning);
-            border-radius: var(--radius); padding: 32px; max-width: 420px; width: 90%;
-            text-align: center; position: relative;
-            animation: popupSlide 0.3s ease; box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
-        }
-        @keyframes popupSlide {
-            from { opacity: 0; transform: translateY(-30px) scale(0.9); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .mark-popup-close {
-            position: absolute; top: 14px; right: 14px; width: 36px; height: 36px;
-            border-radius: 50%; background: var(--bg-dark); border: 1px solid var(--border);
-            color: var(--text-muted); cursor: pointer; display: flex;
-            align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s;
-        }
-        .mark-popup-close:hover { background: var(--danger); color: #fff; transform: rotate(90deg); }
-        .mark-popup-icon { width: 80px; height: 80px; margin: 0 auto 16px; }
-        .mark-popup-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .mark-popup h2 {
-            font-size: 24px; background: linear-gradient(135deg, var(--warning), #fbbf24);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
-        }
-        .mark-popup p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -147,87 +89,81 @@
             </div>
 
             <div class="stats-grid mb-3">
-                <div class="stat-card mark-input-disabled" style="position: relative;">
+                <div class="stat-card">
                     <div class="stat-icon green"><i class="fa fa-arrow-up"></i></div>
                     <div class="stat-info">
                         <h3 id="mark-highest">-</h3>
-                        <p>Highest Marks</p>
+                        <p>Highest Marks <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></p>
                     </div>
                 </div>
-                <div class="stat-card mark-input-disabled" style="position: relative;">
+                <div class="stat-card">
                     <div class="stat-icon red"><i class="fa fa-arrow-down"></i></div>
                     <div class="stat-info">
                         <h3 id="mark-lowest">-</h3>
-                        <p>Lowest Marks</p>
+                        <p>Lowest Marks <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></p>
                     </div>
                 </div>
-                <div class="stat-card mark-input-disabled" style="position: relative;">
+                <div class="stat-card">
                     <div class="stat-icon purple"><i class="fa fa-calculator"></i></div>
                     <div class="stat-info">
                         <h3 id="mark-avg">-</h3>
-                        <p>Average</p>
+                        <p>Average <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></p>
                     </div>
                 </div>
             </div>
 
             <div class="grid-2">
-                <!-- ADD MARKS CARD (LOCKED) -->
-                <div class="card premium-card-wrapper">
+                <!-- ADD MARKS CARD -->
+                <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fa fa-plus-circle"></i> Add Marks</h2>
-                        <span class="badge" style="background: var(--warning); color: #000; font-size: 11px; padding: 4px 8px; border-radius: 10px;">
-                            <i class="fa fa-crown"></i> Premium
-                        </span>
+                        <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" class="premium-header-badge">
                     </div>
                     <form id="mark-form">
-                        <div class="form-group">
-                            <label>Subject</label>
-                            <input type="text" id="mark-subject" class="form-control mark-input-disabled" placeholder="e.g. Mathematics" disabled>
+                        <div class="form-group input-wrapper-locked">
+                            <label>Subject <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></label>
+                            <input type="text" id="mark-subject" class="form-control premium-locked" placeholder="e.g. Mathematics" disabled>
+                            <i class="fa fa-lock lock-symbol"></i>
                         </div>
                         <div class="form-row">
-                            <div class="form-group">
-                                <label>Marks</label>
-                                <input type="number" id="mark-value" class="form-control mark-input-disabled" placeholder="0" disabled>
+                            <div class="form-group input-wrapper-locked">
+                                <label>Marks <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></label>
+                                <input type="number" id="mark-value" class="form-control premium-locked" placeholder="0" disabled>
+                                <i class="fa fa-lock lock-symbol"></i>
                             </div>
-                            <div class="form-group">
-                                <label>Date</label>
-                                <input type="date" id="mark-date" class="form-control mark-input-disabled" disabled>
+                            <div class="form-group input-wrapper-locked">
+                                <label>Date <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></label>
+                                <input type="date" id="mark-date" class="form-control premium-locked" disabled>
+                                <i class="fa fa-lock lock-symbol"></i>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Period</label>
-                            <select id="mark-period" class="form-control mark-input-disabled" disabled>
+                        <div class="form-group input-wrapper-locked">
+                            <label>Period <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></label>
+                            <select id="mark-period" class="form-control premium-locked" disabled>
                                 <option value="Monthly">Monthly</option>
                                 <option value="Weekly">Weekly</option>
                                 <option value="Yearly">Yearly</option>
                             </select>
+                            <i class="fa fa-lock lock-symbol"></i>
                         </div>
-                        <button type="submit" class="btn btn-primary w-full mark-input-disabled" disabled>
+                        <button type="submit" class="btn btn-primary w-full btn-locked" disabled>
                             <i class="fa fa-save"></i> Save Mark
                         </button>
                     </form>
-                    <div class="premium-overlay" onclick="window.showMarkPopup()">
-                        <div class="premium-overlay-content">
-                            <i class="fa fa-lock"></i>
-                            <h3>Premium Feature</h3>
-                            <p>Track your academic progress</p>
-                            <span class="btn">Unlock Now</span>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- CHART & TABLE CARD (LOCKED) -->
-                <div class="card premium-card-wrapper">
+                <!-- CHART & TABLE CARD -->
+                <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fa fa-chart-bar"></i> Mark Chart</h2>
-                        <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 18px; height: 18px;">
+                        <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" class="premium-header-badge">
                     </div>
-                    <div class="chart-container mb-3" style="min-height: 250px;">
+                    <div class="chart-container mb-3">
                         <canvas id="markChart" class="chart-canvas"></canvas>
                     </div>
                     <div class="card-header">
                         <h2 class="card-title"><i class="fa fa-list"></i> Recent Entries</h2>
-                        <button id="mark-clear" class="btn btn-sm btn-secondary mark-input-disabled" disabled>
+                        <button id="mark-clear" class="btn btn-sm btn-secondary btn-locked" disabled>
                             <i class="fa fa-trash"></i> Clear Data
                         </button>
                     </div>
@@ -235,23 +171,15 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Subject</th>
-                                    <th>Marks</th>
-                                    <th>Date</th>
+                                    <th>Subject <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></th>
+                                    <th>Marks <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></th>
+                                    <th>Date <img src="https://i.postimg.cc/nrFwN8kn/gem.png" class="premium-inline-icon"></th>
                                 </tr>
                             </thead>
                             <tbody id="mark-tbody">
-                                <!-- Locked via overlay -->
+                                <!-- Populated by script.js -->
                             </tbody>
                         </table>
-                    </div>
-                    <div class="premium-overlay" onclick="window.showMarkPopup()">
-                        <div class="premium-overlay-content">
-                            <i class="fa fa-lock"></i>
-                            <h3>Premium Feature</h3>
-                            <p>View analytics and history</p>
-                            <span class="btn">Unlock Now</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -262,56 +190,44 @@
         </main>
     </div>
 
-    <!-- Premium Popup -->
-    <div id="mark-premium-popup" class="mark-popup-overlay">
-        <div class="mark-popup">
-            <button class="mark-popup-close" onclick="window.closeMarkPopup()" aria-label="Close"><i class="fa fa-times"></i></button>
-            <div class="mark-popup-content">
-                <div class="mark-popup-icon">
-                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
-                </div>
-                <h2>Unlock Mark Analyze</h2>
-                <p>Get full access to mark tracking, performance analytics, PDF exports, and detailed history of your academic progress!</p>
-                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 16px;">
-                    <i class="fa fa-crown"></i> Get Premium
-                </a>
-            </div>
-        </div>
-    </div>
-
     <script src="script.js"></script>
     <script>
-        window.showMarkPopup = function() {
-            document.getElementById('mark-premium-popup').style.display = 'flex';
-        };
-        window.closeMarkPopup = function() {
-            document.getElementById('mark-premium-popup').style.display = 'none';
-        };
-        document.getElementById('mark-premium-popup')?.addEventListener('click', function(e) {
-            if (e.target === this) window.closeMarkPopup();
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') window.closeMarkPopup();
-        });
-
-        // Safely disable interactions that script.js might try to re-enable
+        // Safely intercept form submission & clear button to show premium message
         document.addEventListener('DOMContentLoaded', function() {
-            // Prevent form submission logic if overlay fails for some reason
             const form = document.getElementById('mark-form');
-            if (form) {
-                form.addEventListener('submit', e => {
-                    e.preventDefault();
-                    window.showMarkPopup();
-                });
-            }
-            
-            // Disable clear button logic
             const clearBtn = document.getElementById('mark-clear');
-            if (clearBtn) {
-                clearBtn.onclick = (e) => {
+
+            // Block Form Submit
+            if (form) {
+                form.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    window.showMarkPopup();
+                    e.stopImmediatePropagation();
+                    if(APP && APP.showToast) APP.showToast('🔒 Mark tracking is a Premium feature. Upgrade to unlock!');
+                }, true);
+            }
+
+            // Block Clear Button
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    if(APP && APP.showToast) APP.showToast('🔒 Clearing data requires Premium.');
+                }, true);
+            }
+
+            // Ensure inputs stay locked even after APP.renderMarks() runs
+            if (typeof APP !== 'undefined' && typeof APP.renderMarks === 'function') {
+                const originalRender = APP.renderMarks;
+                APP.renderMarks = function() {
+                    originalRender.call(APP);
+                    // Re-apply lock styles
+                    document.querySelectorAll('.premium-locked').forEach(el => {
+                        el.disabled = true;
+                        el.style.pointerEvents = 'none';
+                    });
                 };
+                // Trigger once after APP loads
+                setTimeout(() => APP.renderMarks(), 150);
             }
         });
     </script>
