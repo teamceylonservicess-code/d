@@ -131,15 +131,17 @@
             </div>
 
             <footer class="site-footer">
-                Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱🇰
+                Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱
             </footer>
         </main>
     </div>
 
-    <!-- Premium Popup (Hidden by default) -->
+    <!-- Premium Popup (Hidden by default - NO AUTO OPEN) -->
     <div id="premium-popup" class="premium-popup-overlay" style="display: none;">
         <div class="premium-popup">
-            <button class="premium-popup-close" onclick="closePremiumPopup()" aria-label="Close"><i class="fa fa-times"></i></button>
+            <button class="premium-popup-close" onclick="closePremiumPopup()" aria-label="Close">
+                <i class="fa fa-times"></i>
+            </button>
             <div class="premium-popup-content">
                 <div class="premium-popup-icon">
                     <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
@@ -176,6 +178,7 @@
         // Render avatars
         function renderAvatars() {
             const grid = document.getElementById('avatar-grid');
+            if (!grid) return;
             grid.innerHTML = avatars.map((avatar, index) => `
                 <div class="avatar-option ${avatar.locked ? 'locked' : ''}" 
                      data-avatar="${avatar.url}" 
@@ -195,39 +198,60 @@
             document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             const avatarUrl = element.dataset.avatar;
-            document.getElementById('preview-avatar').src = avatarUrl;
+            const previewAvatar = document.getElementById('preview-avatar');
+            if (previewAvatar) {
+                previewAvatar.src = avatarUrl;
+            }
             if (typeof APP !== 'undefined' && APP.data) {
                 APP.data.profile.avatar = avatarUrl;
                 APP.save();
             }
         }
 
-        // Show premium popup (ONLY on click)
+        // Show premium popup (ONLY on click - NOT on load)
         function showPremiumPopup() {
-            document.getElementById('premium-popup').style.display = 'flex';
+            const popup = document.getElementById('premium-popup');
+            if (popup) {
+                popup.style.display = 'flex';
+            }
         }
 
         // Close premium popup
         function closePremiumPopup() {
-            document.getElementById('premium-popup').style.display = 'none';
+            const popup = document.getElementById('premium-popup');
+            if (popup) {
+                popup.style.display = 'none';
+            }
         }
 
-        // Close on outside click
+        // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            // Render avatars
             renderAvatars();
-            if (typeof APP !== 'undefined') APP.initProfile();
             
+            // Initialize APP profile if exists
+            if (typeof APP !== 'undefined') {
+                APP.initProfile();
+            }
+            
+            // Close popup on outside click
             const popup = document.getElementById('premium-popup');
             if (popup) {
                 popup.addEventListener('click', function(e) {
-                    if (e.target === popup) closePremiumPopup();
+                    if (e.target === popup) {
+                        closePremiumPopup();
+                    }
                 });
             }
             
             // Close on Escape key
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') closePremiumPopup();
+                if (e.key === 'Escape') {
+                    closePremiumPopup();
+                }
             });
+            
+            // NO AUTO OPEN - Popup stays hidden until user clicks
         });
     </script>
 </body>
