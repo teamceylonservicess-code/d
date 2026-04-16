@@ -7,30 +7,35 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Premium Lock Styles (Self-contained) */
-        .premium-lock-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(15, 15, 26, 0.75);
-            backdrop-filter: blur(4px);
-            cursor: pointer; z-index: 5;
-            border-radius: var(--radius);
-            transition: all var(--transition);
+        /* Premium Lock Styles (Inline to keep style.css untouched) */
+        .badge-container.locked {
+            pointer-events: none;
+            opacity: 0.85;
+            cursor: default;
         }
-        .premium-lock-overlay:hover { background: rgba(15, 15, 26, 0.85); }
-        .premium-lock-content {
-            color: var(--warning); font-weight: 700;
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-            font-size: 14px; text-align: center;
+        .badge.locked:hover {
+            transform: none;
+            box-shadow: var(--shadow-sm);
         }
-        .premium-lock-content img { width: 32px; height: 32px; }
-        .premium-lock-content span { font-size: 12px; color: var(--text-muted); font-weight: 400; }
-        
-        .badge-locked { opacity: 0.4; filter: grayscale(1); pointer-events: none; }
-        .input-locked { pointer-events: none; opacity: 0.6; position: relative; }
-        .input-locked::after {
-            content: '🔒'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-            font-size: 16px; opacity: 0.8;
+        .goal-input-wrapper { position: relative; }
+        .form-control.locked {
+            background: var(--bg-dark);
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .lock-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: var(--warning);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -83,70 +88,63 @@
                 </div>
             </div>
 
-            <!-- Premium Banner -->
-            <div class="card mb-3" style="background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(108,43,217,0.08)); border: 1px solid var(--warning); position: relative; overflow: hidden;">
-                <div style="display: flex; align-items: center; gap: 14px; position: relative; z-index: 1;">
-                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 42px; height: 42px; animation: float 3s ease-in-out infinite;">
-                    <div style="flex: 1;">
-                        <h3 style="color: var(--warning); margin: 0; font-size: 18px;">Unlock Premium Achievements</h3>
-                        <p style="color: var(--text-muted); margin: 4px 0 0; font-size: 14px;">Track progress, customize goals, and unlock exclusive badges!</p>
-                    </div>
-                    <a href="premium.html" class="btn btn-sm" style="background: linear-gradient(135deg, var(--warning), #fbbf24); color: #000;">Get Premium</a>
+            <!-- Weekly Badges (View Only) -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fa fa-medal"></i> Weekly Badges</h2>
+                    <div id="goal-display" class="goal-display">0 / 35h</div>
                 </div>
-            </div>
-
-
-                <div class="badge-container" style="position: relative;">
-                    <div class="premium-lock-overlay" onclick="showAchievePremiumPopup()"></div>
-                    <div class="badge bronze badge-locked">
+                <div class="badge-container locked">
+                    <div class="badge bronze locked" data-badge="bronze">
                         <div class="badge-icon"><i class="fa fa-medal"></i></div>
                         <div class="badge-name">Bronze</div>
                         <div class="badge-desc">60% of goal</div>
                     </div>
-                    <div class="badge silver badge-locked">
+                    <div class="badge silver locked" data-badge="silver">
                         <div class="badge-icon"><i class="fa fa-award"></i></div>
                         <div class="badge-name">Silver</div>
                         <div class="badge-desc">100% of goal</div>
                     </div>
-                    <div class="badge golden badge-locked">
+                    <div class="badge golden locked" data-badge="golden">
                         <div class="badge-icon"><i class="fa fa-crown"></i></div>
                         <div class="badge-name">Golden</div>
                         <div class="badge-desc">130% of goal</div>
                     </div>
                 </div>
+                <p style="text-align:center; margin-top:14px; font-size:13px; color:var(--text-muted);">
+                    <i class="fa fa-eye" style="margin-right:4px;"></i> View only • Upgrade to unlock interactive tracking
+                </p>
             </div>
 
-            <!-- LOCKED: Customize Goal -->
-            <div class="card mb-3" style="position: relative; overflow: hidden;">
+            <!-- Customize Goal (Locked) -->
+            <div class="card mb-3">
                 <div class="card-header">
                     <h2 class="card-title"><i class="fa fa-sliders-h"></i> Customize Goal</h2>
                     <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 18px; height: 18px;">
                 </div>
-                <div class="form-group input-locked">
-                    <label>Weekly Target (Hours)</label>
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <input type="number" id="goal-input" class="form-control" value="35" disabled style="flex: 1; background: var(--bg-dark);">
-                        <span style="color: var(--warning); font-weight: 600; display: flex; align-items: center; gap: 6px;">
-                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" style="width: 16px; height: 16px;"> Premium
-                        </span>
+                <div class="form-group">
+                    <label>Weekly Target (Hours) <span style="color:var(--warning); font-size:12px;"><i class="fa fa-lock"></i> Premium</span></label>
+                    <div class="flex items-center gap-3 goal-input-wrapper">
+                        <input type="number" id="goal-input" class="form-control locked" value="35" min="1" max="100" disabled>
+                        <span class="lock-icon"><i class="fa fa-lock"></i></span>
+                        <button id="update-goal" class="btn btn-primary locked" disabled>Update</button>
                     </div>
                 </div>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
-                    Bronze: 21h | Silver: 35h | Golden: 45.5h <br>
-                    <i class="fa fa-lock" style="margin-right: 4px;"></i>Upgrade to customize your weekly target
+                <p class="text-muted mt-2" style="font-size:13px;">
+                    <i class="fa fa-lock" style="margin-right:4px;"></i> Bronze: 21h | Silver: 35h | Golden: 45.5h<br>
+                    Upgrade to Premium to customize your weekly targets.
                 </p>
             </div>
 
-            <!-- Unlocked: How it Works -->
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title"><i class="fa fa-info-circle"></i> How it Works</h2>
                 </div>
                 <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Log study hours in Time Tracker</li>
-                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Badges unlock based on your weekly goal</li>
-                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Change your target anytime <span style="color: var(--warning); font-size: 12px;">(Premium)</span></li>
-                    <li style="padding: 8px 0; color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Golden badge triggers confetti!</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Log daily study hours in Time Tracker</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Badges unlock automatically based on progress</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Golden badge triggers confetti celebration</li>
+                    <li style="padding: 8px 0; color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Data resets weekly automatically</li>
                 </ul>
             </div>
 
@@ -156,57 +154,27 @@
         </main>
     </div>
 
-    <!-- Premium Popup -->
-    <div id="achieve-premium-popup" class="premium-popup-overlay" style="display: none;">
-        <div class="premium-popup">
-            <button class="premium-popup-close" onclick="closeAchievePremiumPopup()" aria-label="Close"><i class="fa fa-times"></i></button>
-            <div class="premium-popup-content">
-                <div class="premium-popup-icon">
-                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
-                </div>
-                <h2>Unlock Achievements</h2>
-                <p>Get access to custom weekly goals, progress tracking, and exclusive premium badges!</p>
-                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 16px;">
-                    <i class="fa fa-crown"></i> Get Premium
-                </a>
-            </div>
-        </div>
-    </div>
-
     <script src="script.js"></script>
     <script>
-        // Popup Functions
-        function showAchievePremiumPopup() {
-            document.getElementById('achieve-premium-popup').style.display = 'flex';
-        }
-        function closeAchievePremiumPopup() {
-            document.getElementById('achieve-premium-popup').style.display = 'none';
-        }
-
-        // Close on outside click & Escape
-        document.getElementById('achieve-premium-popup').addEventListener('click', function(e) {
-            if (e.target === this) closeAchievePremiumPopup();
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeAchievePremiumPopup();
-        });
-
-        // Safely override APP.initAchievements to keep script from crashing
+        // Safely override APP.initAchievements to keep locks after APP runs
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof APP !== 'undefined' && typeof APP.initAchievements === 'function') {
                 const originalInit = APP.initAchievements;
                 APP.initAchievements = function() {
+                    // Run original logic so badges still update based on study hours
                     originalInit.call(APP);
-                    // Re-lock UI after APP runs
-                    const el = document.getElementById('goal-display');
-                    if (el) {
-                        el.innerHTML = '🔒 Upgrade to View Progress';
-                        el.style.color = 'var(--warning)';
-                    }
-                    document.querySelectorAll('.badge').forEach(b => b.classList.remove('earned'));
+                    
+                    // Re-apply locks
+                    const input = document.getElementById('goal-input');
+                    const btn = document.getElementById('update-goal');
+                    const container = document.querySelector('.badge-container');
+                    
+                    if (input) { input.disabled = true; input.classList.add('locked'); }
+                    if (btn) { btn.disabled = true; btn.classList.add('locked'); }
+                    if (container) container.classList.add('locked');
                 };
-                // Trigger once after load
-                setTimeout(() => APP.initAchievements(), 150);
+                // Trigger once after page loads
+                setTimeout(() => APP.initAchievements(), 120);
             }
         });
     </script>
