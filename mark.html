@@ -1,80 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learny - Mark Analyze</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#6c2bd9">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learny - Mark Analyze</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Premium Lock Styles (Self-contained) */
+        .premium-card-wrapper {
+            position: relative;
+            overflow: hidden;
+            pointer-events: none; /* Blocks interaction with underlying elements */
+        }
+        .premium-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 15, 26, 0.85);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            cursor: pointer;
+            pointer-events: auto; /* Overlay captures clicks */
+            transition: background var(--transition);
+        }
+        .premium-overlay:hover {
+            background: rgba(15, 15, 26, 0.92);
+        }
+        .premium-overlay-content {
+            text-align: center;
+            color: var(--text-main);
+            animation: float 3s ease-in-out infinite;
+        }
+        .premium-overlay-content i {
+            font-size: 48px;
+            color: var(--warning);
+            margin-bottom: 16px;
+            display: block;
+        }
+        .premium-overlay-content h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--warning);
+        }
+        .premium-overlay-content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .premium-overlay-content .btn {
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+            color: #000;
+            font-weight: 700;
+            padding: 10px 24px;
+            border-radius: 24px;
+        }
+        
+        /* Disable inputs visually even if overlay wasn't enough */
+        .mark-input-disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Premium Popup Styles */
+        .mark-popup-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            display: none; align-items: center; justify-content: center;
+            z-index: 10000; backdrop-filter: blur(5px);
+        }
+        .mark-popup {
+            background: var(--bg-card); border: 2px solid var(--warning);
+            border-radius: var(--radius); padding: 32px; max-width: 420px; width: 90%;
+            text-align: center; position: relative;
+            animation: popupSlide 0.3s ease; box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+        }
+        @keyframes popupSlide {
+            from { opacity: 0; transform: translateY(-30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .mark-popup-close {
+            position: absolute; top: 14px; right: 14px; width: 36px; height: 36px;
+            border-radius: 50%; background: var(--bg-dark); border: 1px solid var(--border);
+            color: var(--text-muted); cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s;
+        }
+        .mark-popup-close:hover { background: var(--danger); color: #fff; transform: rotate(90deg); }
+        .mark-popup-icon { width: 80px; height: 80px; margin: 0 auto 16px; }
+        .mark-popup-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .mark-popup h2 {
+            font-size: 24px; background: linear-gradient(135deg, var(--warning), #fbbf24);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
+        }
+        .mark-popup p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+    </style>
 </head>
 <body>
-  <div class="app-container">
-    <div class="overlay"></div>
-    <aside class="sidebar">
-      <div class="sidebar-header"><div class="sidebar-logo"><i class="fa fa-graduation-cap"></i></div><span class="sidebar-title">Learny</span></div>
-      <ul class="nav-list">
-        <li class="nav-item"><a href="index.html"><i class="fa fa-grip"></i> Dashboard</a></li>
-        <li class="nav-item"><a href="assistant.html"><i class="fa fa-robot"></i> Assistant</a></li>
-        <li class="nav-item"><a href="tasks.html"><i class="fa fa-check-circle"></i> Tasks</a></li>
-        <li class="nav-item"><a href="time.html"><i class="fa fa-clock"></i> Time Tracker</a></li>
-        <li class="nav-item"><a href="achievements.html"><i class="fa fa-trophy"></i> Achievements</a></li>
-        <li class="nav-item"><a href="motivation.html"><i class="fa fa-quote-left"></i> Motivation</a></li>
-        <li class="nav-item"><a href="music.html"><i class="fa fa-music"></i> Music</a></li>
-        <li class="nav-item"><a href="pomodoro.html"><i class="fa fa-hourglass-half"></i> Pomodoro</a></li>
-        <li class="nav-item active"><a href="mark.html"><i class="fa fa-chart-line"></i> Mark Analyze</a></li>
-        <li class="nav-item"><a href="pastpapers.html"><i class="fa fa-file-alt"></i> Past Papers</a></li>
-        <li class="nav-item"><a href="countdown.html"><i class="fa fa-calendar-day"></i> Countdown</a></li>
-        <li class="nav-item"><a href="settings.html"><i class="fa fa-cog"></i> Settings</a></li>
-        <li class="nav-item"><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
-        <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
-      </ul>
-      <div class="sidebar-welcome"><p class="welcome-text">Welcome!</p><div class="divider"></div><p>Stay focused & keep learning</p></div>
-    </aside>
-    <main class="main-content">
-      <header class="page-header">
-        <button class="hamburger"><i class="fa fa-bars"></i></button>
-        <h1 class="page-title"><i class="fa fa-chart-line"></i> Mark Analyze</h1>
-        <div class="header-actions"><button class="theme-toggle" id="toggle-mode"><i class="fa fa-sun"></i></button></div>
-      </header>
-      <div id="notification-toast" class="notification"><i class="fa fa-check-circle"></i><span></span></div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-icon green"><i class="fa fa-arrow-up"></i></div><div class="stat-info"><h3 id="mark-highest">0</h3><p>Highest Marks</p></div></div>
-        <div class="stat-card"><div class="stat-icon red"><i class="fa fa-arrow-down"></i></div><div class="stat-info"><h3 id="mark-lowest">0</h3><p>Lowest Marks</p></div></div>
-        <div class="stat-card"><div class="stat-icon blue"><i class="fa fa-equals"></i></div><div class="stat-info"><h3 id="mark-avg">0</h3><p>Average</p></div></div>
-      </div>
-      <div class="card mb-3">
-        <div class="card-header"><span class="card-title"><i class="fa fa-plus-circle"></i> Add Marks</span></div>
-        <form id="mark-form">
-          <div class="grid-equal">
-            <div class="form-group"><label>Subject</label><input type="text" id="mark-subject" class="form-control" placeholder="e.g. Math" maxlength="15"></div>
-            <div class="form-group"><label>Marks</label><input type="number" id="mark-value" class="form-control" placeholder="0-100" max="100"></div>
-            <div class="form-group"><label>Date</label><input type="date" id="mark-date" class="form-control"></div>
-            <div class="form-group"><label>Period</label><select id="mark-period" class="form-control"><option>Monthly</option><option>Weekly</option><option>Yearly</option></select></div>
-          </div>
-          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Mark</button>
-        </form>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header"><span class="card-title"><i class="fa fa-chart-bar"></i> Mark Chart</span></div>
-          <div class="chart-container"><canvas id="markChart" class="chart-canvas"></canvas></div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">L</div>
+                <div class="sidebar-title">Learny</div>
+            </div>
+            <nav>
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+                    <li class="nav-item"><a href="assistant.html"><i class="fa fa-robot"></i> Assistant</a></li>
+                    <li class="nav-item"><a href="tasks.html"><i class="fa fa-tasks"></i> Tasks</a></li>
+                    <li class="nav-item"><a href="time.html"><i class="fa fa-clock"></i> Time Tracker</a></li>
+                    <li class="nav-item"><a href="achievements.html"><i class="fa fa-trophy"></i> Achievements</a></li>
+                    <li class="nav-item"><a href="motivation.html"><i class="fa fa-lightbulb"></i> Motivation</a></li>
+                    <li class="nav-item"><a href="music.html"><i class="fa fa-music"></i> Music</a></li>
+                    <li class="nav-item"><a href="pomodoro.html"><i class="fa fa-stopwatch"></i> Pomodoro</a></li>
+                    <li class="nav-item active"><a href="mark.html"><i class="fa fa-chart-line"></i> Mark Analyze</a></li>
+                    <li class="nav-item"><a href="pastpapers.html"><i class="fa fa-file-alt"></i> Past Papers</a></li>
+                    <li class="nav-item"><a href="countdown.html"><i class="fa fa-hourglass-half"></i> Countdown</a></li>
+                    <li class="nav-item"><a href="settings.html"><i class="fa fa-cog"></i> Settings</a></li>
+                    <li class="nav-item"><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
+                    <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
+                    <li class="nav-item premium-nav-item" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+                        <a href="premium.html" class="premium-link" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(108, 43, 217, 0.2)); color: var(--warning); border-radius: 8px;">
+                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 18px; height: 18px; margin-right: 8px;">
+                            Get Premium
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-welcome">
+                <div class="divider"></div>
+                <p id="sidebar-username">Welcome, User!</p>
+            </div>
+        </aside>
+
+        <div class="overlay"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <button class="hamburger"><i class="fa fa-bars"></i></button>
+                <h1 class="page-title"><i class="fa fa-chart-line"></i> Mark Analyze</h1>
+                <div class="header-actions">
+                    <button class="theme-toggle"><i class="fa fa-moon"></i></button>
+                </div>
+            </div>
+
+            <div class="stats-grid mb-3">
+                <div class="stat-card mark-input-disabled" style="position: relative;">
+                    <div class="stat-icon green"><i class="fa fa-arrow-up"></i></div>
+                    <div class="stat-info">
+                        <h3 id="mark-highest">-</h3>
+                        <p>Highest Marks</p>
+                    </div>
+                </div>
+                <div class="stat-card mark-input-disabled" style="position: relative;">
+                    <div class="stat-icon red"><i class="fa fa-arrow-down"></i></div>
+                    <div class="stat-info">
+                        <h3 id="mark-lowest">-</h3>
+                        <p>Lowest Marks</p>
+                    </div>
+                </div>
+                <div class="stat-card mark-input-disabled" style="position: relative;">
+                    <div class="stat-icon purple"><i class="fa fa-calculator"></i></div>
+                    <div class="stat-info">
+                        <h3 id="mark-avg">-</h3>
+                        <p>Average</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- ADD MARKS CARD (LOCKED) -->
+                <div class="card premium-card-wrapper">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fa fa-plus-circle"></i> Add Marks</h2>
+                        <span class="badge" style="background: var(--warning); color: #000; font-size: 11px; padding: 4px 8px; border-radius: 10px;">
+                            <i class="fa fa-crown"></i> Premium
+                        </span>
+                    </div>
+                    <form id="mark-form">
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input type="text" id="mark-subject" class="form-control mark-input-disabled" placeholder="e.g. Mathematics" disabled>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Marks</label>
+                                <input type="number" id="mark-value" class="form-control mark-input-disabled" placeholder="0" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="mark-date" class="form-control mark-input-disabled" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Period</label>
+                            <select id="mark-period" class="form-control mark-input-disabled" disabled>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Yearly">Yearly</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-full mark-input-disabled" disabled>
+                            <i class="fa fa-save"></i> Save Mark
+                        </button>
+                    </form>
+                    <div class="premium-overlay" onclick="window.showMarkPopup()">
+                        <div class="premium-overlay-content">
+                            <i class="fa fa-lock"></i>
+                            <h3>Premium Feature</h3>
+                            <p>Track your academic progress</p>
+                            <span class="btn">Unlock Now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHART & TABLE CARD (LOCKED) -->
+                <div class="card premium-card-wrapper">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fa fa-chart-bar"></i> Mark Chart</h2>
+                        <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 18px; height: 18px;">
+                    </div>
+                    <div class="chart-container mb-3" style="min-height: 250px;">
+                        <canvas id="markChart" class="chart-canvas"></canvas>
+                    </div>
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fa fa-list"></i> Recent Entries</h2>
+                        <button id="mark-clear" class="btn btn-sm btn-secondary mark-input-disabled" disabled>
+                            <i class="fa fa-trash"></i> Clear Data
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Marks</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mark-tbody">
+                                <!-- Locked via overlay -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="premium-overlay" onclick="window.showMarkPopup()">
+                        <div class="premium-overlay-content">
+                            <i class="fa fa-lock"></i>
+                            <h3>Premium Feature</h3>
+                            <p>View analytics and history</p>
+                            <span class="btn">Unlock Now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="site-footer">
+                Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱🇰
+            </footer>
+        </main>
+    </div>
+
+    <!-- Premium Popup -->
+    <div id="mark-premium-popup" class="mark-popup-overlay">
+        <div class="mark-popup">
+            <button class="mark-popup-close" onclick="window.closeMarkPopup()" aria-label="Close"><i class="fa fa-times"></i></button>
+            <div class="mark-popup-content">
+                <div class="mark-popup-icon">
+                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
+                </div>
+                <h2>Unlock Mark Analyze</h2>
+                <p>Get full access to mark tracking, performance analytics, PDF exports, and detailed history of your academic progress!</p>
+                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 16px;">
+                    <i class="fa fa-crown"></i> Get Premium
+                </a>
+            </div>
         </div>
-        <div class="card">
-          <div class="card-header"><span class="card-title"><i class="fa fa-history"></i> Recent Entries</span></div>
-          <div class="table-responsive">
-            <table class="data-table" id="mark-table">
-              <thead><tr><th>Subject</th><th>Marks</th><th>Date</th></tr></thead>
-              <tbody id="mark-tbody"></tbody>
-            </table>
-          </div>
-          <button class="btn btn-danger btn-sm mt-2" id="mark-clear"><i class="fa fa-trash"></i> Clear Data</button>
-        </div>
-      </div>
-      <footer class="site-footer">Powered by <a href="contact.html">DC</a> | Made in Sri Lanka <i class="fa fa-heart" style="color:var(--danger)"></i></footer>
-    </main>
-  </div>
-  <script src="script.js"></script>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        window.showMarkPopup = function() {
+            document.getElementById('mark-premium-popup').style.display = 'flex';
+        };
+        window.closeMarkPopup = function() {
+            document.getElementById('mark-premium-popup').style.display = 'none';
+        };
+        document.getElementById('mark-premium-popup')?.addEventListener('click', function(e) {
+            if (e.target === this) window.closeMarkPopup();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') window.closeMarkPopup();
+        });
+
+        // Safely disable interactions that script.js might try to re-enable
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevent form submission logic if overlay fails for some reason
+            const form = document.getElementById('mark-form');
+            if (form) {
+                form.addEventListener('submit', e => {
+                    e.preventDefault();
+                    window.showMarkPopup();
+                });
+            }
+            
+            // Disable clear button logic
+            const clearBtn = document.getElementById('mark-clear');
+            if (clearBtn) {
+                clearBtn.onclick = (e) => {
+                    e.preventDefault();
+                    window.showMarkPopup();
+                };
+            }
+        });
+    </script>
 </body>
 </html>
