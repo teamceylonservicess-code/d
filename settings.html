@@ -48,52 +48,59 @@
         </div>
       </header>
 
-      <!-- Color Theme Section - MODIFIED -->
+      <!-- Color Theme Section - FIXED -->
       <div class="card">
         <div class="card-header">
           <h2 class="card-title"><i class="fa fa-palette"></i> Color Theme</h2>
         </div>
         <div class="theme-grid">
           
-          <!-- ✅ Purple - FREE -->
+          <!-- ✅ Purple - FREE (clickable) -->
           <div class="theme-option active" data-theme="purple">
             <div class="theme-preview" style="background: #6c2bd9"></div>
             <div class="theme-name">Purple</div>
           </div>
           
-          <!-- ✅ Green - FREE -->
+          <!-- ✅ Green - FREE (clickable) -->
           <div class="theme-option" data-theme="green">
             <div class="theme-preview" style="background: #10b981"></div>
             <div class="theme-name">Green</div>
           </div>
           
-          <!-- 🔒 Red - PREMIUM -->
-          <div class="theme-option" data-theme="red" style="position: relative; cursor: not-allowed; opacity: 0.85;">
+          <!-- 🔒 Red - PREMIUM (locked) -->
+          <div class="theme-option" data-theme="red" 
+               style="position: relative; opacity: 0.7; pointer-events: none; cursor: not-allowed;"
+               onclick="return false">
             <div class="theme-preview" style="background: #ef4444"></div>
             <div class="theme-name">Red</div>
+            <!-- Gem icon - clickable, stops event propagation -->
             <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" 
-                 style="position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; cursor: pointer; z-index: 2;"
-                 onclick="window.location.href='premium.html'" 
+                 style="position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; cursor: pointer; z-index: 10; pointer-events: auto;"
+                 onclick="event.stopPropagation(); window.location.href='premium.html'" 
                  title="Unlock Premium Theme">
           </div>
           
-          <!-- 🔒 Blue - PREMIUM -->
-          <div class="theme-option" data-theme="blue" style="position: relative; cursor: not-allowed; opacity: 0.85;">
+          <!-- 🔒 Blue - PREMIUM (locked) -->
+          <div class="theme-option" data-theme="blue" 
+               style="position: relative; opacity: 0.7; pointer-events: none; cursor: not-allowed;"
+               onclick="return false">
             <div class="theme-preview" style="background: #3b82f6"></div>
             <div class="theme-name">Blue</div>
             <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" 
-                 style="position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; cursor: pointer; z-index: 2;"
-                 onclick="window.location.href='premium.html'" 
+                 style="position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; cursor: pointer; z-index: 10; pointer-events: auto;"
+                 onclick="event.stopPropagation(); window.location.href='premium.html'" 
                  title="Unlock Premium Theme">
           </div>
           
-          <!-- 🔒 Yellow - PREMIUM -->
-          <div class="theme-option" data-theme="yellow" style="position: relative; cursor: not-allowed; opacity: 0.85;">
+          <!-- 🔒 Yellow - PREMIUM (locked) -->
+          <div class="theme-option" data-theme="yellow" 
+               style="position: relative; opacity: 0.7; pointer-events: none; cursor: not-allowed;"
+               onclick="return false">
             <div class="theme-preview" style="background: #eab308"></div>
             <div class="theme-name">Yellow</div>
             <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" 
-                 style="position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; cursor: pointer; z-index: 2;"
-                 onclick="window.location.href='premium.html'" 
+                 style="position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; cursor: pointer; z-index: 10; pointer-events: auto;"
+                 onclick="event.stopPropagation(); window.location.href='premium.html'" 
                  title="Unlock Premium Theme">
           </div>
           
