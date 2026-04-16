@@ -1,73 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learny - Achievements</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#6c2bd9">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learny - Achievements</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Premium Lock Styles (Self-contained) */
+        .premium-lock-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(15, 15, 26, 0.75);
+            backdrop-filter: blur(4px);
+            cursor: pointer; z-index: 5;
+            border-radius: var(--radius);
+            transition: all var(--transition);
+        }
+        .premium-lock-overlay:hover { background: rgba(15, 15, 26, 0.85); }
+        .premium-lock-content {
+            color: var(--warning); font-weight: 700;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            font-size: 14px; text-align: center;
+        }
+        .premium-lock-content img { width: 32px; height: 32px; }
+        .premium-lock-content span { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+        
+        .badge-locked { opacity: 0.4; filter: grayscale(1); pointer-events: none; }
+        .input-locked { pointer-events: none; opacity: 0.6; position: relative; }
+        .input-locked::after {
+            content: '🔒'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+            font-size: 16px; opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
-  <div class="app-container">
-    <div class="overlay"></div>
-    <aside class="sidebar">
-      <div class="sidebar-header"><div class="sidebar-logo"><i class="fa fa-graduation-cap"></i></div><span class="sidebar-title">Learny</span></div>
-      <ul class="nav-list">
-        <li class="nav-item"><a href="index.html"><i class="fa fa-grip"></i> Dashboard</a></li>
-        <li class="nav-item"><a href="assistant.html"><i class="fa fa-robot"></i> Assistant</a></li>
-        <li class="nav-item"><a href="tasks.html"><i class="fa fa-check-circle"></i> Tasks</a></li>
-        <li class="nav-item"><a href="time.html"><i class="fa fa-clock"></i> Time Tracker</a></li>
-        <li class="nav-item active"><a href="achievements.html"><i class="fa fa-trophy"></i> Achievements</a></li>
-        <li class="nav-item"><a href="motivation.html"><i class="fa fa-quote-left"></i> Motivation</a></li>
-        <li class="nav-item"><a href="music.html"><i class="fa fa-music"></i> Music</a></li>
-        <li class="nav-item"><a href="pomodoro.html"><i class="fa fa-hourglass-half"></i> Pomodoro</a></li>
-        <li class="nav-item"><a href="mark.html"><i class="fa fa-chart-line"></i> Mark Analyze</a></li>
-        <li class="nav-item"><a href="pastpapers.html"><i class="fa fa-file-alt"></i> Past Papers</a></li>
-        <li class="nav-item"><a href="countdown.html"><i class="fa fa-calendar-day"></i> Countdown</a></li>
-        <li class="nav-item"><a href="settings.html"><i class="fa fa-cog"></i> Settings</a></li>
-        <li class="nav-item"><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
-        <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
-      </ul>
-      <div class="sidebar-welcome"><p class="welcome-text">Welcome!</p><div class="divider"></div><p>Stay focused & keep learning</p></div>
-    </aside>
-    <main class="main-content">
-      <header class="page-header">
-        <button class="hamburger"><i class="fa fa-bars"></i></button>
-        <h1 class="page-title"><i class="fa fa-trophy"></i> Achievements</h1>
-        <div class="header-actions"><button class="theme-toggle" id="toggle-mode"><i class="fa fa-sun"></i></button></div>
-      </header>
-      <canvas id="confetti-canvas" class="confetti"></canvas>
-      <div id="notification-toast" class="notification"><i class="fa fa-check-circle"></i><span></span></div>
-      <div class="card mb-3">
-        <div class="card-header"><span class="card-title"><i class="fa fa-medal"></i> Weekly Badges</span><span id="goal-display">0 / 35h</span></div>
-        <div class="badge-container">
-          <div class="badge bronze"><div class="badge-icon"><i class="fa fa-medal"></i></div><div class="badge-name">Bronze</div><div class="badge-desc">60% of goal</div></div>
-          <div class="badge silver"><div class="badge-icon"><i class="fa fa-award"></i></div><div class="badge-name">Silver</div><div class="badge-desc">100% of goal</div></div>
-          <div class="badge golden"><div class="badge-icon"><i class="fa fa-crown"></i></div><div class="badge-name">Golden</div><div class="badge-desc">130% of goal</div></div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">L</div>
+                <div class="sidebar-title">Learny</div>
+            </div>
+            <nav>
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+                    <li class="nav-item"><a href="assistant.html"><i class="fa fa-robot"></i> Assistant</a></li>
+                    <li class="nav-item"><a href="tasks.html"><i class="fa fa-tasks"></i> Tasks</a></li>
+                    <li class="nav-item"><a href="time.html"><i class="fa fa-clock"></i> Time Tracker</a></li>
+                    <li class="nav-item active"><a href="achievements.html"><i class="fa fa-trophy"></i> Achievements</a></li>
+                    <li class="nav-item"><a href="motivation.html"><i class="fa fa-lightbulb"></i> Motivation</a></li>
+                    <li class="nav-item"><a href="music.html"><i class="fa fa-music"></i> Music</a></li>
+                    <li class="nav-item"><a href="pomodoro.html"><i class="fa fa-stopwatch"></i> Pomodoro</a></li>
+                    <li class="nav-item"><a href="mark.html"><i class="fa fa-chart-line"></i> Mark Analyze</a></li>
+                    <li class="nav-item"><a href="pastpapers.html"><i class="fa fa-file-alt"></i> Past Papers</a></li>
+                    <li class="nav-item"><a href="countdown.html"><i class="fa fa-hourglass-half"></i> Countdown</a></li>
+                    <li class="nav-item"><a href="settings.html"><i class="fa fa-cog"></i> Settings</a></li>
+                    <li class="nav-item"><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
+                    <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
+                    <li class="nav-item premium-nav-item" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+                        <a href="premium.html" class="premium-link" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(108, 43, 217, 0.2)); color: var(--warning); border-radius: 8px;">
+                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 18px; height: 18px; margin-right: 8px;">
+                            Get Premium
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-welcome">
+                <div class="divider"></div>
+                <p id="sidebar-username">Welcome, User!</p>
+            </div>
+        </aside>
+
+        <div class="overlay"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <button class="hamburger"><i class="fa fa-bars"></i></button>
+                <h1 class="page-title"><i class="fa fa-trophy"></i> Achievements</h1>
+                <div class="header-actions">
+                    <button class="theme-toggle"><i class="fa fa-moon"></i></button>
+                </div>
+            </div>
+
+            <!-- Premium Banner -->
+            <div class="card mb-3" style="background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(108,43,217,0.08)); border: 1px solid var(--warning); position: relative; overflow: hidden;">
+                <div style="display: flex; align-items: center; gap: 14px; position: relative; z-index: 1;">
+                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 42px; height: 42px; animation: float 3s ease-in-out infinite;">
+                    <div style="flex: 1;">
+                        <h3 style="color: var(--warning); margin: 0; font-size: 18px;">Unlock Premium Achievements</h3>
+                        <p style="color: var(--text-muted); margin: 4px 0 0; font-size: 14px;">Track progress, customize goals, and unlock exclusive badges!</p>
+                    </div>
+                    <a href="premium.html" class="btn btn-sm" style="background: linear-gradient(135deg, var(--warning), #fbbf24); color: #000;">Get Premium</a>
+                </div>
+            </div>
+
+            <!-- LOCKED: Weekly Badges -->
+            <div class="card mb-3" style="position: relative; overflow: hidden;">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fa fa-medal"></i> Weekly Badges</h2>
+                    <span class="badge" style="background: var(--bg-dark); color: var(--warning); font-size: 12px; padding: 4px 10px; border-radius: 12px;">
+                        <i class="fa fa-lock" style="margin-right: 4px;"></i> Premium
+                    </span>
+                </div>
+                <div style="text-align: center; margin-bottom: 18px;">
+                    <h3 id="goal-display" style="color: var(--warning); font-size: 20px; font-weight: 700;">🔒 Upgrade to View Progress</h3>
+                </div>
+                <div class="badge-container" style="position: relative;">
+                    <div class="premium-lock-overlay" onclick="showAchievePremiumPopup()"></div>
+                    <div class="badge bronze badge-locked">
+                        <div class="badge-icon"><i class="fa fa-medal"></i></div>
+                        <div class="badge-name">Bronze</div>
+                        <div class="badge-desc">60% of goal</div>
+                    </div>
+                    <div class="badge silver badge-locked">
+                        <div class="badge-icon"><i class="fa fa-award"></i></div>
+                        <div class="badge-name">Silver</div>
+                        <div class="badge-desc">100% of goal</div>
+                    </div>
+                    <div class="badge golden badge-locked">
+                        <div class="badge-icon"><i class="fa fa-crown"></i></div>
+                        <div class="badge-name">Golden</div>
+                        <div class="badge-desc">130% of goal</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOCKED: Customize Goal -->
+            <div class="card mb-3" style="position: relative; overflow: hidden;">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fa fa-sliders-h"></i> Customize Goal</h2>
+                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 18px; height: 18px;">
+                </div>
+                <div class="form-group input-locked">
+                    <label>Weekly Target (Hours)</label>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="number" id="goal-input" class="form-control" value="35" disabled style="flex: 1; background: var(--bg-dark);">
+                        <span style="color: var(--warning); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" style="width: 16px; height: 16px;"> Premium
+                        </span>
+                    </div>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                    Bronze: 21h | Silver: 35h | Golden: 45.5h <br>
+                    <i class="fa fa-lock" style="margin-right: 4px;"></i>Upgrade to customize your weekly target
+                </p>
+            </div>
+
+            <!-- Unlocked: How it Works -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fa fa-info-circle"></i> How it Works</h2>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Log study hours in Time Tracker</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Badges unlock based on your weekly goal</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Change your target anytime <span style="color: var(--warning); font-size: 12px;">(Premium)</span></li>
+                    <li style="padding: 8px 0; color: var(--text-muted); font-size: 14px;"><i class="fa fa-check" style="color: var(--success); margin-right: 8px;"></i>Golden badge triggers confetti!</li>
+                </ul>
+            </div>
+
+            <footer class="site-footer">
+                Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱🇰
+            </footer>
+        </main>
+    </div>
+
+    <!-- Premium Popup -->
+    <div id="achieve-premium-popup" class="premium-popup-overlay" style="display: none;">
+        <div class="premium-popup">
+            <button class="premium-popup-close" onclick="closeAchievePremiumPopup()" aria-label="Close"><i class="fa fa-times"></i></button>
+            <div class="premium-popup-content">
+                <div class="premium-popup-icon">
+                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
+                </div>
+                <h2>Unlock Achievements</h2>
+                <p>Get access to custom weekly goals, progress tracking, and exclusive premium badges!</p>
+                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 16px;">
+                    <i class="fa fa-crown"></i> Get Premium
+                </a>
+            </div>
         </div>
-      </div>
-      <div class="grid-equal">
-        <div class="card">
-          <div class="card-header"><span class="card-title"><i class="fa fa-sliders-h"></i> Customize Goal</span></div>
-          <div class="form-group"><label>Weekly Target (Hours)</label><input type="number" id="goal-input" class="form-control" value="35" min="10" max="80"></div>
-          <p style="color:var(--text-muted);font-size:13px">Bronze: <span class="bronze-val">21h</span> | Silver: <span class="silver-val">35h</span> | Golden: <span class="golden-val">45.5h</span></p>
-        </div>
-        <div class="card">
-          <div class="card-header"><span class="card-title"><i class="fa fa-info-circle"></i> How it Works</span></div>
-          <ul style="color:var(--text-muted);font-size:14px;padding-left:20px;line-height:1.8">
-            <li>Log study hours in <strong>Time Tracker</strong></li>
-            <li>Badges unlock based on your weekly goal</li>
-            <li>Change your target anytime</li>
-            <li>Golden badge triggers confetti!</li>
-            <li>Data resets weekly automatically</li>
-          </ul>
-        </div>
-      </div>
-      <footer class="site-footer">Powered by <a href="contact.html">DC</a> | Made in Sri Lanka <i class="fa fa-heart" style="color:var(--danger)"></i></footer>
-    </main>
-  </div>
-  <script src="script.js"></script>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Popup Functions
+        function showAchievePremiumPopup() {
+            document.getElementById('achieve-premium-popup').style.display = 'flex';
+        }
+        function closeAchievePremiumPopup() {
+            document.getElementById('achieve-premium-popup').style.display = 'none';
+        }
+
+        // Close on outside click & Escape
+        document.getElementById('achieve-premium-popup').addEventListener('click', function(e) {
+            if (e.target === this) closeAchievePremiumPopup();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAchievePremiumPopup();
+        });
+
+        // Safely override APP.initAchievements to keep script from crashing
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof APP !== 'undefined' && typeof APP.initAchievements === 'function') {
+                const originalInit = APP.initAchievements;
+                APP.initAchievements = function() {
+                    originalInit.call(APP);
+                    // Re-lock UI after APP runs
+                    const el = document.getElementById('goal-display');
+                    if (el) {
+                        el.innerHTML = '🔒 Upgrade to View Progress';
+                        el.style.color = 'var(--warning)';
+                    }
+                    document.querySelectorAll('.badge').forEach(b => b.classList.remove('earned'));
+                };
+                // Trigger once after load
+                setTimeout(() => APP.initAchievements(), 150);
+            }
+        });
+    </script>
 </body>
 </html>
