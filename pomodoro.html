@@ -7,39 +7,68 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Premium Lock Styles for Pomodoro */
-        .pomo-premium-lock {
+        /* Premium Lock Styles (Self-contained, no style.css changes) */
+        .input-wrapper-locked { position: relative; }
+        .lock-icon {
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+            color: var(--warning); font-size: 14px; pointer-events: none; z-index: 2;
+        }
+        .form-control.pomo-locked {
+            opacity: 0.65; cursor: not-allowed !important;
+            background: var(--bg-dark); padding-right: 34px;
+        }
+        .btn.pomo-locked {
+            opacity: 0.65; cursor: not-allowed !important;
             position: relative;
         }
-        .pomo-premium-lock::after {
-            content: '🔒';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            opacity: 0.8;
-            pointer-events: none;
-            color: var(--warning);
-            z-index: 2;
+        .btn.pomo-locked::after {
+            content: '🔒'; margin-left: 6px; font-size: 12px;
         }
+        .premium-badge-pomo {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+            color: #000; font-size: 11px; font-weight: 700;
+            padding: 4px 10px; border-radius: 14px;
+        }
+        .premium-badge-pomo img { width: 12px; height: 12px; }
+        
         .pomo-lock-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(15, 15, 26, 0.6);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            backdrop-filter: blur(2px);
-            z-index: 3;
-            transition: all var(--transition);
+            position: absolute; inset: 0; z-index: 5;
+            cursor: pointer; background: rgba(15, 15, 26, 0.0);
+            transition: background var(--transition);
         }
-        .pomo-lock-overlay:hover { background: rgba(15, 15, 26, 0.75); }
-        .pomo-lock-overlay i { color: var(--warning); font-size: 24px; }
-        .pomo-btn-locked { opacity: 0.6; cursor: not-allowed; position: relative; }
-        .pomo-input-locked { opacity: 0.6; cursor: not-allowed; background: var(--bg-dark) !important; }
+        .pomo-lock-overlay:hover { background: rgba(15, 15, 26, 0.15); }
+
+        /* Premium Popup Styles */
+        .pomo-popup-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            display: none; align-items: center; justify-content: center;
+            z-index: 10000; backdrop-filter: blur(5px);
+        }
+        .pomo-popup {
+            background: var(--bg-card); border: 2px solid var(--warning);
+            border-radius: var(--radius); padding: 32px; max-width: 420px; width: 90%;
+            text-align: center; position: relative;
+            animation: popupSlide 0.3s ease; box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+        }
+        @keyframes popupSlide {
+            from { opacity: 0; transform: translateY(-30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .pomo-popup-close {
+            position: absolute; top: 14px; right: 14px; width: 36px; height: 36px;
+            border-radius: 50%; background: var(--bg-dark); border: 1px solid var(--border);
+            color: var(--text-muted); cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s;
+        }
+        .pomo-popup-close:hover { background: var(--danger); color: #fff; transform: rotate(90deg); }
+        .pomo-popup-icon { width: 80px; height: 80px; margin: 0 auto 16px; }
+        .pomo-popup-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .pomo-popup h2 {
+            font-size: 24px; background: linear-gradient(135deg, var(--warning), #fbbf24);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
+        }
+        .pomo-popup p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -108,10 +137,15 @@
                     <button id="pomo-start" class="btn btn-success btn-lg">Start</button>
                     <button id="pomo-pause" class="btn btn-warning btn-lg hidden">Pause</button>
                     <button id="pomo-stop" class="btn btn-danger btn-lg">Stop</button>
-                    <!-- Premium Locked Fullscreen Button -->
-                    <button id="pomo-fullscreen" class="btn btn-secondary btn-lg pomo-btn-locked" title="Premium Feature">
-                        <i class="fa fa-expand"></i>
-                    </button>
+                    
+                    <!-- Locked Fullscreen -->
+                    <div style="position:relative; display:inline-flex;">
+                        <button id="pomo-fullscreen" class="btn btn-secondary btn-lg pomo-locked" disabled title="Premium Feature">
+                            <i class="fa fa-expand"></i>
+                        </button>
+                        <div class="pomo-lock-overlay" onclick="window.showPomoPopup()"></div>
+                    </div>
+
                     <button id="pomo-minimize" class="btn btn-secondary btn-lg hidden">Minimize</button>
                 </div>
 
@@ -119,35 +153,35 @@
                     <i class="fa fa-fire"></i> Completed Sessions: <span id="session-count-display">0</span> / <span id="long-break-target">4</span>
                 </div>
 
+                <!-- Locked Customize Duration -->
                 <div class="card mb-3" style="position: relative; overflow: hidden;">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fa fa-sliders-h"></i> Customize Duration</h2>
-                        <span class="badge" style="background: var(--warning); color: #000; font-size: 11px; padding: 4px 8px; border-radius: 10px;">
-                            <i class="fa fa-crown"></i> Premium
-                        </span>
+                        <span class="premium-badge-pomo"><img src="https://i.postimg.cc/nrFwN8kn/gem.png"> Premium</span>
                     </div>
                     <div class="grid-2" style="gap: 12px; margin-bottom: 12px;">
-                        <div class="form-group mb-0 pomo-premium-lock">
+                        <div class="form-group mb-0 input-wrapper-locked">
                             <label>Focus (min)</label>
-                            <input type="number" id="set-work" class="form-control pomo-input-locked" value="25" min="5" max="120" disabled>
+                            <input type="number" id="set-work" class="form-control pomo-locked" value="25" min="5" max="120" disabled>
+                            <i class="fa fa-lock lock-icon"></i>
                         </div>
-                        <div class="form-group mb-0 pomo-premium-lock">
+                        <div class="form-group mb-0 input-wrapper-locked">
                             <label>Short Break (min)</label>
-                            <input type="number" id="set-short" class="form-control pomo-input-locked" value="5" min="1" max="30" disabled>
+                            <input type="number" id="set-short" class="form-control pomo-locked" value="5" min="1" max="30" disabled>
+                            <i class="fa fa-lock lock-icon"></i>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group mb-0 pomo-premium-lock">
+                        <div class="form-group mb-0 input-wrapper-locked">
                             <label>Long Break (min)</label>
-                            <input type="number" id="set-long" class="form-control pomo-input-locked" value="15" min="5" max="60" disabled>
+                            <input type="number" id="set-long" class="form-control pomo-locked" value="15" min="5" max="60" disabled>
+                            <i class="fa fa-lock lock-icon"></i>
                         </div>
                         <div class="form-group mb-0" style="display: flex; align-items: flex-end; padding-bottom: 2px;">
-                            <button id="save-settings" class="btn btn-primary w-full pomo-btn-locked" disabled>
-                                <i class="fa fa-save"></i> Save Settings
-                            </button>
+                            <button id="save-settings" class="btn btn-primary w-full pomo-locked" disabled><i class="fa fa-save"></i> Save Settings</button>
                         </div>
                     </div>
-                    <div class="pomo-lock-overlay" onclick="window.location.href='premium.html'"></div>
+                    <div class="pomo-lock-overlay" onclick="window.showPomoPopup()"></div>
                 </div>
 
                 <div class="grid-2">
@@ -155,18 +189,19 @@
                         <div class="card-header">
                             <h2 class="card-title"><i class="fa fa-history"></i> Recent Sessions</h2>
                         </div>
-                        <div id="pomo-sessions-list" class="task-list">
-                            No sessions yet
-                        </div>
+                        <div id="pomo-sessions-list" class="task-list">No sessions yet</div>
                     </div>
 
-                    <div class="card">
+                    <!-- Locked Export PDF -->
+                    <div class="card" style="position: relative; overflow: hidden;">
                         <div class="card-header">
                             <h2 class="card-title"><i class="fa fa-file-pdf"></i> Export PDF</h2>
-                            <!-- Premium Locked Export Button -->
-                            <button id="export-pdf" class="btn btn-sm btn-secondary pomo-btn-locked" title="Premium Feature">
-                                <i class="fa fa-download"></i> Export
-                            </button>
+                            <div style="position:relative; display:inline-flex;">
+                                <button id="export-pdf" class="btn btn-sm btn-secondary pomo-locked" disabled title="Premium Feature">
+                                    <i class="fa fa-download"></i> Export
+                                </button>
+                                <div class="pomo-lock-overlay" onclick="window.showPomoPopup()"></div>
+                            </div>
                         </div>
                         <div class="how-to-use-content">
                             <ul>
@@ -186,49 +221,49 @@
         </main>
     </div>
 
+    <!-- Premium Popup -->
+    <div id="pomo-premium-popup" class="pomo-popup-overlay">
+        <div class="pomo-popup">
+            <button class="pomo-popup-close" onclick="window.closePomoPopup()" aria-label="Close"><i class="fa fa-times"></i></button>
+            <div class="pomo-popup-content">
+                <div class="pomo-popup-icon">
+                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
+                </div>
+                <h2>Unlock Premium Pomodoro</h2>
+                <p>Get custom durations, unlimited sessions, fullscreen focus mode, and PDF progress export for your study routine!</p>
+                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 16px;">
+                    <i class="fa fa-crown"></i> Get Premium
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script>
+        window.showPomoPopup = function() {
+            document.getElementById('pomo-premium-popup').style.display = 'flex';
+        };
+        window.closePomoPopup = function() {
+            document.getElementById('pomo-premium-popup').style.display = 'none';
+        };
+        document.getElementById('pomo-premium-popup')?.addEventListener('click', function(e) {
+            if (e.target === this) window.closePomoPopup();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') window.closePomoPopup();
+        });
+
+        // Safely prevent script.js from attaching to locked elements
         document.addEventListener('DOMContentLoaded', function() {
-            // 1. Override APP.initPomodoro to lock premium features
-            if (typeof APP !== 'undefined' && APP.pomo) {
-                const originalInit = APP.pomo.init;
-                APP.pomo.init = function() {
-                    originalInit.call(APP.pomo);
-                    
-                    // Disable Customize Duration
-                    ['set-work', 'set-short', 'set-long'].forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) { el.disabled = true; el.classList.add('pomo-input-locked'); }
-                    });
-                    const saveBtn = document.getElementById('save-settings');
-                    if (saveBtn) {
-                        saveBtn.disabled = true;
-                        saveBtn.classList.add('pomo-btn-locked');
-                        saveBtn.style.opacity = '0.6';
-                    }
-
-                    // Disable Fullscreen
-                    const fsBtn = document.getElementById('pomo-fullscreen');
-                    if (fsBtn) {
-                        fsBtn.disabled = true;
-                        fsBtn.classList.add('pomo-btn-locked');
-                        fsBtn.onclick = (e) => { e.preventDefault(); window.location.href='premium.html'; };
-                    }
-
-                    // Disable Export PDF
-                    const expBtn = document.getElementById('export-pdf');
-                    if (expBtn) {
-                        expBtn.disabled = true;
-                        expBtn.classList.add('pomo-btn-locked');
-                        expBtn.onclick = (e) => { e.preventDefault(); window.location.href='premium.html'; };
-                    }
-                };
-            }
-
-            // Run init after APP loads
-            setTimeout(() => {
-                if (typeof APP !== 'undefined' && APP.pomo) APP.pomo.init();
-            }, 100);
+            const originalBind = APP.pomo.bindUI;
+            APP.pomo.bindUI = function() {
+                originalBind.call(APP.pomo);
+                // Disable locked elements in case script.js re-enables them
+                ['set-work','set-short','set-long','save-settings','pomo-fullscreen','export-pdf'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.disabled = true; el.classList.add('pomo-locked'); }
+                });
+            };
         });
     </script>
 </body>
