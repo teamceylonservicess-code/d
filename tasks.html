@@ -1,251 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learny - Tasks</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Premium Popup Styles (Keeps existing styles intact) */
-        .premium-popup-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); display: none;
-            align-items: center; justify-content: center; z-index: 10000;
-            backdrop-filter: blur(5px);
-        }
-        .premium-popup {
-            background: var(--bg-card); border: 2px solid var(--warning);
-            border-radius: var(--radius); padding: 32px; max-width: 420px; width: 90%;
-            text-align: center; position: relative;
-            animation: popupSlide 0.3s ease; box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
-        }
-        @keyframes popupSlide {
-            from { opacity: 0; transform: translateY(-30px) scale(0.9); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .premium-popup-close {
-            position: absolute; top: 14px; right: 14px; width: 36px; height: 36px;
-            border-radius: 50%; background: var(--bg-dark); border: 1px solid var(--border);
-            color: var(--text-muted); cursor: pointer; display: flex;
-            align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s;
-        }
-        .premium-popup-close:hover { background: var(--danger); color: #fff; transform: rotate(90deg); }
-        .premium-popup-icon { width: 80px; height: 80px; margin: 0 auto 16px; }
-        .premium-popup-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .premium-popup h2 {
-            font-size: 24px; background: linear-gradient(135deg, var(--warning), #fbbf24);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
-        }
-        .premium-popup p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-        
-        /* Premium Locked Stat UI */
-        .stat-locked-text { color: var(--warning) !important; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .stat-locked-text img { width: 16px; height: 16px; vertical-align: middle; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learny - Tasks</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6c2bd9">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo">L</div>
-                <div class="sidebar-title">Learny</div>
-            </div>
-            <nav>
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="index.html"><i class="fa fa-home"></i> Dashboard</a></li>
-                    <li class="nav-item"><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
-                    <li class="nav-item"><a href="assistant.html"><i class="fa fa-robot"></i> Assistant</a></li>
-                    <li class="nav-item active"><a href="tasks.html"><i class="fa fa-tasks"></i> Tasks</a></li>
-                    <li class="nav-item"><a href="time.html"><i class="fa fa-clock"></i> Time Tracker</a></li>
-                    <li class="nav-item"><a href="achievements.html"><i class="fa fa-trophy"></i> Achievements</a></li>
-                    <li class="nav-item"><a href="motivation.html"><i class="fa fa-lightbulb"></i> Motivation</a></li>
-                    <li class="nav-item"><a href="music.html"><i class="fa fa-music"></i> Music</a></li>
-                    <li class="nav-item"><a href="pomodoro.html"><i class="fa fa-stopwatch"></i> Pomodoro</a></li>
-                    <li class="nav-item"><a href="mark.html"><i class="fa fa-chart-line"></i> Mark Analyze</a></li>
-                    <li class="nav-item"><a href="pastpapers.html"><i class="fa fa-file-alt"></i> Past Papers</a></li>
-                    <li class="nav-item"><a href="countdown.html"><i class="fa fa-hourglass-half"></i> Countdown</a></li>
-                    <li class="nav-item"><a href="settings.html"><i class="fa fa-cog"></i> Settings</a></li>
-                    <li class="nav-item"><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
-                    <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
-                    <li class="nav-item premium-nav-item" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
-                        <a href="premium.html" class="premium-link" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(108, 43, 217, 0.2)); color: var(--warning); border-radius: 8px;">
-                            <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium" style="width: 18px; height: 18px; margin-right: 8px;">
-                            Get Premium
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="sidebar-welcome">
-                <div class="divider"></div>
-                <p id="sidebar-username">Welcome, User!</p>
-            </div>
-        </aside>
-
-        <div class="overlay"></div>
-
-        <main class="main-content">
-            <div class="page-header">
-                <button class="hamburger"><i class="fa fa-bars"></i></button>
-                <h1 class="page-title"><i class="fa fa-tasks"></i> Tasks</h1>
-                <div class="header-actions">
-                    <button class="theme-toggle"><i class="fa fa-moon"></i></button>
-                </div>
-            </div>
-
-            <div class="stats-grid mb-3">
-                <div class="stat-card">
-                    <div class="stat-icon purple"><i class="fa fa-list"></i></div>
-                    <div class="stat-info">
-                        <h3 id="task-count">0</h3>
-                        <p>Total Tasks</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon orange"><i class="fa fa-clock"></i></div>
-                    <div class="stat-info">
-                        <h3 id="pending-count">0</h3>
-                        <p>Pending</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon green"><i class="fa fa-check"></i></div>
-                    <div class="stat-info">
-                        <h3 id="done-count">0</h3>
-                        <p>Done</p>
-                    </div>
-                </div>
-                <!-- PREMIUM LOCKED COMPLETION RATE -->
-                <div class="stat-card">
-                    <div class="stat-icon blue"><i class="fa fa-chart-line"></i></div>
-                    <div class="stat-info">
-                        <h3 id="completion-rate" class="stat-locked-text">
-                            0% <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
-                        </h3>
-                        <p>Completion</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fa fa-plus-circle"></i> Add Task</h2>
-                    <span class="badge" style="background: var(--bg-dark); padding: 4px 10px; border-radius: 12px; font-size: 12px; color: var(--text-muted);">
-                        <i class="fa fa-lock" style="margin-right: 4px;"></i> <span id="task-limit-display">0</span>/4 Free
-                    </span>
-                </div>
-                <form id="task-form" class="form-row">
-                    <div class="form-group" style="flex: 3;">
-                        <input type="text" id="task-input" class="form-control" placeholder="Enter task description..." maxlength="50" required>
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 120px;">
-                        <input type="time" id="task-time-input" class="form-control">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 100px; margin-bottom: 0;">
-                        <button type="submit" class="btn btn-primary w-full">Add Task</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fa fa-list-check"></i> Today's Tasks</h2>
-                </div>
-                <div id="tasks-list" class="task-list">
-                    No tasks yet. Add one above!
-                </div>
-            </div>
-
-            <footer class="site-footer">
-                Powered by <a href="contact.html">DC</a> | Made in Sri Lanka 🇱🇰
-            </footer>
-        </main>
-    </div>
-
-    <!-- Premium Popup -->
-    <div id="premium-popup" class="premium-popup-overlay">
-        <div class="premium-popup">
-            <button class="premium-popup-close" onclick="closePremiumPopup()" aria-label="Close"><i class="fa fa-times"></i></button>
-            <div class="premium-popup-content">
-                <div class="premium-popup-icon">
-                    <img src="https://i.postimg.cc/nrFwN8kn/gem.png" alt="Premium">
-                </div>
-                <h2>Task Limit Reached</h2>
-                <p>You've reached the free limit of 4 tasks per day. Upgrade to Premium for unlimited tasks, detailed completion analytics, and progress tracking!</p>
-                <a href="premium.html" class="btn btn-primary btn-lg" style="margin-top: 12px;">
-                    <i class="fa fa-crown"></i> Unlock Premium
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-    <script>
-        // ==========================================
-        // PREMIUM ENFORCEMENT SCRIPT
-        // ==========================================
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // 1. Override APP.renderTasks to lock Completion % UI
-            const originalRenderTasks = APP.renderTasks;
-            APP.renderTasks = function() {
-                // Call original logic to update other stats and list
-                originalRenderTasks.call(APP);
-                
-                // Force lock the completion rate
-                const el = document.getElementById('completion-rate');
-                if (el) {
-                    el.innerHTML = '0% <img src="https://i.postimg.cc/nrFwN8kn/gem.png" style="width:16px;height:16px;vertical-align:middle;">';
-                    el.classList.add('stat-locked-text');
-                }
-
-                // Update the free limit badge
-                const today = new Date().toDateString();
-                const count = APP.data.tasks.filter(t => t.date === today).length;
-                const badge = document.getElementById('task-limit-display');
-                if (badge) badge.textContent = count;
-            };
-
-            // 2. Override APP.initTasks to intercept form submission
-            // We wrap the original initTasks to add our premium check listener
-            const originalInitTasks = APP.initTasks;
-            APP.initTasks = function() {
-                // Run the original initialization (binds the standard submit handler)
-                originalInitTasks.call(APP);
-                
-                // Add our premium check listener in the CAPTURE phase (runs before original)
-                const form = document.getElementById('task-form');
-                if (form) {
-                    form.addEventListener('submit', function(e) {
-                        const today = new Date().toDateString();
-                        const currentTasks = APP.data.tasks.filter(t => t.date === today);
-                        
-                        // Check if limit reached
-                        if (currentTasks.length >= 4) {
-                            e.preventDefault();       // Stop default form action
-                            e.stopPropagation();      // Stop bubble to other listeners
-                            e.stopImmediatePropagation(); // Stop bubble to other immediate listeners
-                            showPremiumPopup();       // Show premium popup
-                            return false;
-                        }
-                    }, true); // true = use capture phase
-                }
-            };
-        });
-
-        // Popup Functions
-        function showPremiumPopup() {
-            document.getElementById('premium-popup').style.display = 'flex';
-        }
-
-        function closePremiumPopup() {
-            document.getElementById('premium-popup').style.display = 'none';
-        }
-
-        // Close on outside click
-        document.getElementById('premium-popup').addEventListener('click', function(e) {
-            if (e.target === this) closePremiumPopup();
-        });
-    </script>
+  <div class="app-container">
+    <div class="overlay"></div>
+    <aside class="sidebar">
+      <div class="sidebar-header"><div class="sidebar-logo"><i class="fa fa-graduation-cap"></i></div><span class="sidebar-title">Learny</span></div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="index.html"><i class="fa fa-grip"></i> Dashboard</a></li>
+        <li class="nav-item"><a href="assistant.html"><i class="fa fa-robot"></i> Assistant</a></li>
+        <li class="nav-item active"><a href="tasks.html"><i class="fa fa-check-circle"></i> Tasks</a></li>
+        <li class="nav-item"><a href="time.html"><i class="fa fa-clock"></i> Time Tracker</a></li>
+        <li class="nav-item"><a href="achievements.html"><i class="fa fa-trophy"></i> Achievements</a></li>
+        <li class="nav-item"><a href="motivation.html"><i class="fa fa-quote-left"></i> Motivation</a></li>
+        <li class="nav-item"><a href="music.html"><i class="fa fa-music"></i> Music</a></li>
+        <li class="nav-item"><a href="pomodoro.html"><i class="fa fa-hourglass-half"></i> Pomodoro</a></li>
+        <li class="nav-item"><a href="mark.html"><i class="fa fa-chart-line"></i> Mark Analyze</a></li>
+        <li class="nav-item"><a href="pastpapers.html"><i class="fa fa-file-alt"></i> Past Papers</a></li>
+        <li class="nav-item"><a href="countdown.html"><i class="fa fa-calendar-day"></i> Countdown</a></li>
+        <li class="nav-item"><a href="settings.html"><i class="fa fa-cog"></i> Settings</a></li>
+        <li class="nav-item"><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
+        <li class="nav-item"><a href="rate.html"><i class="fa fa-star"></i> Rate Us</a></li>
+      </ul>
+      <div class="sidebar-welcome"><p class="welcome-text">Welcome!</p><div class="divider"></div><p>Stay focused & keep learning</p></div>
+    </aside>
+    <main class="main-content">
+      <header class="page-header">
+        <button class="hamburger"><i class="fa fa-bars"></i></button>
+        <h1 class="page-title"><i class="fa fa-check-circle"></i> Tasks</h1>
+        <div class="header-actions"><button class="theme-toggle" id="toggle-mode"><i class="fa fa-sun"></i></button></div>
+      </header>
+      <div id="notification-toast" class="notification"><i class="fa fa-check-circle"></i><span></span></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon purple"><i class="fa fa-list"></i></div><div class="stat-info"><h3 id="task-count">0</h3><p>Total Tasks</p></div></div>
+        <div class="stat-card"><div class="stat-icon orange"><i class="fa fa-hourglass-start"></i></div><div class="stat-info"><h3 id="pending-count">0</h3><p>Pending</p></div></div>
+        <div class="stat-card"><div class="stat-icon green"><i class="fa fa-check"></i></div><div class="stat-info"><h3 id="done-count">0</h3><p>Done</p></div></div>
+        <div class="stat-card"><div class="stat-icon blue"><i class="fa fa-chart-pie"></i></div><div class="stat-info"><h3 id="completion-rate">0%</h3><p>Completion</p></div></div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header"><span class="card-title"><i class="fa fa-plus-circle"></i> Add Task</span></div>
+        <form id="task-form" class="grid-equal">
+          <div class="form-group"><label>Task Name</label><input type="text" id="task-input" class="form-control" placeholder="What do you need to do?"></div>
+          <div class="form-group"><label>Time</label><input type="time" id="task-time-input" class="form-control"></div>
+          <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Add Task</button>
+        </form>
+        <div class="progress-container"><div class="progress-bar" id="progress-bar" style="width:0"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><i class="fa fa-clipboard-list"></i> Today's Tasks</span></div>
+        <div class="task-list" id="tasks-list"></div>
+      </div>
+      <footer class="site-footer">Powered by <a href="contact.html">DC</a> | Made in Sri Lanka <i class="fa fa-heart" style="color:var(--danger)"></i></footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
